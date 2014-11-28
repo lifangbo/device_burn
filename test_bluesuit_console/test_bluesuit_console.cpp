@@ -3,8 +3,6 @@
 
 #include "stdafx.h"
 
-void getHandle();
-
 #include <VECTOR>
 #include <STRING>
 using namespace std;
@@ -28,19 +26,48 @@ using namespace std;
 
 #define MAX_TIMEOUT 5000
 
-#define PSKEY_DEVICE_NAME	0x0108	//蓝牙设备名
-#define PSKEY_FIXED_PIN		0x035b	//蓝牙设备配对密码
-#define PSKEY_DSP48			0x2288	//cvc码
-#define PSKEY_BDADDR		0x0001	//蓝牙地址
-									//频率校准，数据不详，待问。
+#define PSKEY_DEVICE_NAME					0x0108				//蓝牙设备名
+#define PSKEY_FIXED_PIN						0x035b				//蓝牙设备配对密码
+#define PSKEY_DSP48							0x2288				//cvc码
+#define PSKEY_BDADDR						0x0001				//蓝牙地址
+
+
+
+#define PSKEY_ANA_FREQ	0x002a				//频率校准，数据不详，待问。
 
 
 #define DEFAULT_BD_NAME		"koovox"
 #define DEFAULT_BD_PWD		"koovox"
 
 
+
+
+void getHandle();
+int readKey(const uint16 keys) ;
+int setKey(const uint16 keys, const char * keyVal , const int ksize);
+
 int main(int argc, char** argv)
 {
+
+
+	setKey(PSKEY_DEVICE_NAME,"xiesong" ,strlen("xiesong" ) ) ;
+
+	readKey(PSKEY_DEVICE_NAME);
+	
+	setKey(PSKEY_FIXED_PIN , "default_pwd" , strlen("default_pwd") );
+
+	readKey(PSKEY_FIXED_PIN);
+
+	setKey(PSKEY_DSP48 , "cvc_code" , strlen("cvc_code") );
+	readKey(PSKEY_DSP48);
+
+
+	std::cout << "PSKEY_HOSTIO_PROTOCOL_INFO9" << std::endl;
+	readKey(PSKEY_ANA_FREQ);
+
+
+	while(1)
+		;
 
 	getHandle();
 
@@ -152,7 +179,64 @@ void parseBrackets(std::vector<std::string> &vt){
 
 
 
-void getHandle(){
+
+
+int readKey(const uint16 keys)
+{
+
+	const uint16 PSKEY_USR0 = keys ;//650;
+	
+
+	uint32 devHandle =  openTestEngineSpi(600935, 0, SPI_USB );// openTestEngine(BCSP, "600935", 115200, 5000, 0);
+	
+    if(devHandle != 0)
+    {
+        std::cout << "Device Handle = " << devHandle << std::endl;
+		
+        uint16 data[20] ={'\0'};
+
+//         if(psWrite(devHandle, PSKEY_USR0, PS_STORES_I, 2, data) == TE_OK)
+//         {
+//             std::cout << "Successfully wrote key" << std::endl;
+//         }
+//         else
+//         {
+//             std::cout << "Failed to write key" << std::endl;
+//             closeTestEngine(devHandle);
+//             return -1;
+//         }
+		
+        uint16 keySize;
+        psSize(devHandle, PSKEY_USR0, PS_STORES_IFR, &keySize);
+		
+        data[0] = data[1] = 0;
+		
+        if(psRead(devHandle, PSKEY_USR0, PS_STORES_IFR, 16, data, &keySize) == TE_OK)
+        {
+            std::cout << "data[0] = " << data[0] << std::endl 
+				<< "data[1] = " << data[1] << std::endl;
+
+			char bufstr[128]={'\0'};
+			memcpy( bufstr , data , sizeof(data)*sizeof(uint16) );
+			std::cout << "read into char :" << bufstr <<endl ;
+        }
+        else
+        {
+            std::cout << "Failed to read key" << std::endl;
+            closeTestEngine(devHandle);
+            return -1;
+        }
+		
+        closeTestEngine(devHandle);
+    }
+    else
+    {
+        std::cout << "Failed to initialise device" << std::endl;
+        return -1;
+    }
+
+
+}
 
 
 
@@ -163,8 +247,53 @@ void getHandle(){
 
 
 
+int setKey(const uint16 keys, const char * keyVal , const int ksize)
+{
+	
+	const uint16 PSKEY_USR0 = keys ;//650; 
+	
+	uint32 devHandle =  openTestEngineSpi(600935, 0, SPI_USB );// openTestEngine(BCSP, "600935", 115200, 5000, 0);
+	
+    if(devHandle != 0)
+    {
+        std::cout << "Device Handle = " << devHandle << std::endl;
+		
+        uint16 data[20]={'\0'};
+
+		memcpy( ((char*)data ), keyVal , ksize );
+		
+		if(psWrite(devHandle, PSKEY_USR0, PS_STORES_I, ksize/2, data) == TE_OK)
+		{
+			std::cout << "Successfully wrote key" << std::endl;
+		}
+		else
+		{
+			std::cout << "Failed to write key" << std::endl;
+			closeTestEngine(devHandle);
+			return -1;
+		}
+		
+  
+		
+        closeTestEngine(devHandle);
+    }
+    else
+    {
+        std::cout << "Failed to initialise device" << std::endl;
+        return -1;
+    }
+	
+	
+}
 
 
+
+
+
+
+
+
+void getHandle(){ 
 
 	//获取可用设备的句柄。
 	uint32 iHandle(0);
@@ -314,7 +443,7 @@ void getHandle(){
 		uint16 name_keySize;
 		psSize(iHandle, PSKEY_DEVICE_NAME, PS_STORES_IFR, &name_keySize);
 		std::cout << " name_keySize is " << name_keySize << endl << endl ;
-		if( ( ret= psRead( iHandle , PSKEY_DEVICE_NAME , PS_STORES_IFR , 16 , r_bd_name , &name_keySize ) )==TE_OK )
+		if( ( ret= psRead( iHandle , PSKEY_DEVICE_NAME , PS_STORES_IFR , 0 , r_bd_name , &name_keySize ) )==TE_OK )
 		{
 			std::cout << "r_bd_name[0] = " << r_bd_name[0] << std::endl 
 				<< "r_bd_name[1] = " << r_bd_name[1] << std::endl;
