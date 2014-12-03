@@ -1,0 +1,369 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\BlueToolTestforJoy.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""l.chs\\afxres.rc""          // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\BlueToolTestforJoy.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于 BlueToolTestforJoy"
+FONT 9, "宋体"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "BlueToolTestforJoy 1.0 版",IDC_STATIC,40,10,119,8,
+                    SS_NOPREFIX
+    LTEXT           "版权所有 (C) 2014",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "确定",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDD_BLUETOOLTESTFORJOY_DIALOG DIALOGEX 0, 0, 757, 367
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Joy-BlueTooth"
+FONT 9, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "确定",ID_TEST_DO,365,335,54,14
+    PUSHBUTTON      "保存日志",ID_CANCEL,523,326,54,14
+    CONTROL         "",IDC_RICHEDIT_OUTINFO,"RICHEDIT",ES_MULTILINE | 
+                    WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP,313,25,
+                    160,261
+    CONTROL         "端口01",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,25,35,10
+    CONTROL         "端口02",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,43,35,10
+    CONTROL         "端口03",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,59,35,10
+    CONTROL         "端口04",IDC_CHECK4,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,74,35,10
+    CONTROL         "端口05",IDC_CHECK5,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,90,35,10
+    CONTROL         "端口06",IDC_CHECK6,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,106,35,10
+    CONTROL         "端口07",IDC_CHECK7,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,121,35,10
+    CONTROL         "端口08",IDC_CHECK8,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,139,35,10
+    CONTROL         "端口09",IDC_CHECK9,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,156,35,10
+    CONTROL         "端口10",IDC_CHECK10,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,174,35,10
+    CONTROL         "端口11",IDC_CHECK11,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,192,35,10
+    CONTROL         "端口12",IDC_CHECK12,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,211,35,10
+    CONTROL         "端口13",IDC_CHECK13,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,230,35,10
+    CONTROL         "端口14",IDC_CHECK14,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,246,35,10
+    CONTROL         "端口15",IDC_CHECK15,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,262,35,10
+    CONTROL         "端口16",IDC_CHECK16,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,280,35,10
+    LTEXT           "...",IDC_STATIC_RESULT1,532,25,50,9
+    LTEXT           "...",IDC_STATIC_RESULT2,532,40,50,9
+    LTEXT           "...",IDC_STATIC_RESULT3,532,55,50,9
+    LTEXT           "...",IDC_STATIC_RESULT4,532,71,49,9
+    LTEXT           "...",IDC_STATIC_RESULT5,532,87,50,9
+    LTEXT           "...",IDC_STATIC_RESULT6,532,103,50,9
+    LTEXT           "...",IDC_STATIC_RESULT7,532,120,50,9
+    LTEXT           "...",IDC_STATIC_RESULT8,532,137,50,9
+    LTEXT           "...",IDC_STATIC_RESULT9,532,154,50,9
+    LTEXT           "...",IDC_STATIC_RESULT10,532,173,50,9
+    LTEXT           "...",IDC_STATIC_RESULT11,532,189,50,9
+    LTEXT           "...",IDC_STATIC_RESULT12,532,207,50,9
+    LTEXT           "...",IDC_STATIC_RESULT13,532,226,50,9
+    LTEXT           "...",IDC_STATIC_RESULT14,532,244,50,9
+    LTEXT           "...",IDC_STATIC_RESULT15,532,259,50,9
+    LTEXT           "...",IDC_STATIC_RESULT16,532,277,50,9
+    EDITTEXT        IDC_EDIT_DID1,48,25,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID2,48,40,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID3,48,55,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID4,48,71,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID5,48,87,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID6,48,103,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID7,48,120,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID8,48,137,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID9,48,154,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID10,48,173,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID11,48,189,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID12,48,207,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID13,48,226,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID14,48,244,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID15,48,259,70,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_DID16,48,277,70,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "烧录端口",IDC_STATIC,8,5,33,8
+    LTEXT           "USB SPI",IDC_STATIC,63,5,29,8
+    LTEXT           "蓝牙名称",IDC_STATIC,699,15,33,8
+    LTEXT           "蓝牙地址",IDC_STATIC,142,5,33,8
+    EDITTEXT        IDC_EDIT_BD_NAME1,680,35,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME2,680,51,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME3,680,65,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME4,680,81,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME5,680,97,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME6,680,113,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME7,680,130,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME8,680,145,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME9,680,164,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME10,680,182,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME11,680,199,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME12,680,216,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME13,680,233,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME14,680,253,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME15,680,270,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_NAME16,680,285,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR1,127,25,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR2,127,40,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR3,127,55,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR4,127,71,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR5,127,87,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR6,127,103,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR7,127,120,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR8,127,137,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR9,127,154,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR10,127,173,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR11,127,189,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR12,127,207,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR13,127,226,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR14,127,244,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR15,127,259,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BD_ADDR16,127,277,60,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    LTEXT           "CVC码",IDC_STATIC,221,5,21,8
+    EDITTEXT        IDC_EDIT_CVC1,195,25,105,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC2,195,40,105,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC3,195,55,105,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC4,195,71,105,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC5,195,87,105,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC6,195,103,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC7,195,120,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC8,195,137,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC9,195,154,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC10,195,173,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC11,195,189,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC12,195,207,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC13,195,226,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC14,195,244,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC15,195,259,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_CVC16,195,277,105,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    PUSHBUTTON      "烧录文件",IDC_BUTTON_BURN,264,336,54,14
+    PUSHBUTTON      "准备",IDC_BUTTON_DETECTDEVICE,173,338,54,14
+    EDITTEXT        IDC_EDIT_GLOBAL_FILE,218,297,227,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_GLOBAL_NAME,44,297,100,14,ES_AUTOHSCROLL
+    LTEXT           "烧录文件",IDC_STATIC,184,299,33,8
+    LTEXT           "蓝牙名称",IDC_STATIC,7,299,33,8
+    PUSHBUTTON      "统一设置",IDC_BUTTON_GLOBAL_SETTING,77,331,40,30
+    LTEXT           "校频结果",IDC_STATIC_FREQ_TITLE,534,5,50,10
+    LTEXT           "烧录日志",IDC_STATIC,369,5,55,8
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404B0"
+        BEGIN
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "BlueToolTestforJoy Microsoft 基础类应用程序\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "BlueToolTestforJoy\0"
+            VALUE "LegalCopyright", "版权所有 (C) 2014\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "BlueToolTestforJoy.EXE\0"
+            VALUE "ProductName", "BlueToolTestforJoy 应用程序\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ABOUTBOX            "关于 BlueToolTestforJoy(&A)..."
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE 4, 2
+#pragma code_page(936)
+#endif //_WIN32
+#include "res\BlueToolTestforJoy.rc2"  // non-Microsoft Visual C++ edited resources
+#include "l.chs\afxres.rc"          // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

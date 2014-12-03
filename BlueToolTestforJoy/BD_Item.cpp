@@ -1,0 +1,27 @@
+// BD_Item.cpp: implementation of the BD_Item class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "BlueToolTestforJoy.h"
+#include "BD_Item.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char THIS_FILE[]=__FILE__;
+#define new DEBUG_NEW
+#endif
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+BD_Item::BD_Item()
+{
+
+}
+
+BD_Item::~BD_Item()
+{
+
+}
