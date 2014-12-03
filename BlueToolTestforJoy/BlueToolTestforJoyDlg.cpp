@@ -1536,6 +1536,37 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 			p_dlg->AppendTestInfo(tempinfo , TRUE );
 		}
 		
+
+
+
+
+		//测试电压等参数。
+		tempinfo.Format("  bccmdGetPio32  \r\n" );
+		p_dlg->AppendTestInfo(tempinfo );
+		uint32 direction=0;
+        uint32 value=0;
+		if(iHandle != 0)
+        {
+              
+            // Get the direction and value of the PIO lines.
+            int32 success = bccmdGetPio32(iHandle, &direction, &value);
+            if(success == TE_OK)
+            {
+               // cout << "Direction = " << direction << endl;
+                //cout << "Value = " << value << endl;
+				tempinfo.Format("succed bccmdGetPio32 %d %d \r\n" , direction , value);
+				p_dlg->AppendTestInfo(tempinfo );
+            }else{
+				tempinfo.Format("failed bccmdGetPio32 %d %d \r\n" , direction , value);
+				p_dlg->AppendTestInfo(tempinfo );
+			} 
+            
+        }
+		
+
+
+
+
 		closeTestEngine(iHandle);
 		
 	}

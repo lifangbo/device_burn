@@ -44,22 +44,6 @@
 #define IDC_EDIT_DID16                  1035
 #define IDC_BUTTON_BURN                 1037
 #define IDC_BUTTON_DETECTDEVICE         1038
-#define IDC_EDIT_BD_NAME1               1054
-#define IDC_EDIT_BD_NAME2               1055
-#define IDC_EDIT_BD_NAME3               1056
-#define IDC_EDIT_BD_NAME4               1057
-#define IDC_EDIT_BD_NAME5               1058
-#define IDC_EDIT_BD_NAME6               1059
-#define IDC_EDIT_BD_NAME7               1060
-#define IDC_EDIT_BD_NAME8               1061
-#define IDC_EDIT_BD_NAME9               1062
-#define IDC_EDIT_BD_NAME10              1063
-#define IDC_EDIT_BD_NAME11              1064
-#define IDC_EDIT_BD_NAME12              1065
-#define IDC_EDIT_BD_NAME13              1066
-#define IDC_EDIT_BD_NAME14              1067
-#define IDC_EDIT_BD_NAME15              1068
-#define IDC_EDIT_BD_NAME16              1069
 #define IDC_EDIT_BD_ADDR1               1070
 #define IDC_EDIT_BD_ADDR2               1071
 #define IDC_EDIT_BD_ADDR3               1072
@@ -94,7 +78,6 @@
 #define IDC_EDIT_CVC16                  1101
 #define IDC_EDIT_GLOBAL_FILE            1102
 #define IDC_EDIT_GLOBAL_NAME            1103
-#define IDC_BUTTON_GLOBAL_SETTING       1104
 #define IDC_STATIC_RESULT1              1105
 #define IDC_STATIC_RESULT2              1106
 #define IDC_STATIC_RESULT3              1107
@@ -113,6 +96,10 @@
 #define IDC_STATIC_RESULT16             1120
 #define IDC_STATIC_FREQ_TITLE           1121
 #define IDC_BUTTON_WRITECHECK           1122
+#define IDC_BUTTON_HARDBTN1             1123
+#define IDC_BUTTON_HARDBTN2             1124
+#define IDC_BUTTON_HARDBTN3             1125
+#define IDC_BUTTON_HARDBTN4             1126
 
 // Next default values for new objects
 // 
@@ -120,7 +107,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1123
+#define _APS_NEXT_CONTROL_VALUE         1127
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
