@@ -152,6 +152,7 @@ protected:
 	afx_msg void OnButtonBurn();
 	afx_msg LRESULT ui_callback(WPARAM,LPARAM);
 	afx_msg void OnButtonDetectdevice();
+	afx_msg void OnButtonWritecheck();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -178,7 +179,9 @@ public:
 	 void getHandle(CString &outInfo);
 	
 	
-	static UINT  thd_Process(LPVOID lpParam);
+	static UINT  thread_ProcessBurnFirm(LPVOID lpParam);
+	static UINT  thread_WriteCheckFreq(LPVOID lpParam);
+
 
 	void readCVC(std::vector<std::string> &lst,int count);
 

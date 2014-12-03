@@ -155,6 +155,7 @@ BEGIN_MESSAGE_MAP(CBlueToolTestforJoyDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_BURN, OnButtonBurn)
 	ON_MESSAGE(WM_UPDATEINFO , ui_callback)
 	ON_BN_CLICKED(IDC_BUTTON_DETECTDEVICE, OnButtonDetectdevice)
+	ON_BN_CLICKED(IDC_BUTTON_WRITECHECK, OnButtonWritecheck)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -249,13 +250,13 @@ HCURSOR CBlueToolTestforJoyDlg::OnQueryDragIcon()
 	return (HCURSOR) m_hIcon;
 }
 
+
 void CBlueToolTestforJoyDlg::OnTestDo() 
 {
 	// TODO: Add your control notification handler code here
-	//m_redit_outinfo.SetWindowText()
+#ifdef DEBUG
 	CString strinfo;
-	getHandle(strinfo);
-	
+	getHandle(strinfo); 
 	if (m_lines++%2)
 	{
 		CHARFORMAT cf;
@@ -276,6 +277,8 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 	CString str="新的一行\r\n"; 
 	m_redit_outinfo.SetSel(-1, -1); 
     m_redit_outinfo.ReplaceSel(str); 
+#endif
+
 	
 }
 
@@ -313,7 +316,7 @@ void CBlueToolTestforJoyDlg::AppendTestInfo(CString strInfo,BOOL b_color)
 		cf.dwMask = CFM_BOLD | CFM_COLOR | CFM_FACE |
 			CFM_ITALIC | CFM_SIZE | CFM_UNDERLINE;
 		cf.dwEffects = 0;
-		cf.yHeight = 12*12;//文字高度
+		cf.yHeight = 14*14;//文字高度
 		cf.crTextColor = RGB(200, 100, 255); //文字颜色
 		strcpy(cf.szFaceName ,_T("隶书"));//设置字体
 		m_redit_outinfo.SetSel(-1, -1); 
@@ -653,7 +656,7 @@ void CBlueToolTestforJoyDlg::parseBrackets(std::vector<std::string> &vt)
 
 
 
-UINT  CBlueToolTestforJoyDlg::thd_Process(LPVOID lpParam)
+UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
 {
   
  
@@ -680,7 +683,7 @@ UINT  CBlueToolTestforJoyDlg::thd_Process(LPVOID lpParam)
     {
         //std::cout << "Failed to open devices (" << flmGetBitErrorField() << ")" << std::endl;
 		tempinfo.Format("Failed to open devices %d \r\n" ,flmGetBitErrorField() );
-		p_dlg->AppendTestInfo(tempinfo);
+		p_dlg->AppendTestInfo( tempinfo , TRUE );
     }
 
 // 	//擦除fl中的内容
@@ -700,16 +703,15 @@ UINT  CBlueToolTestforJoyDlg::thd_Process(LPVOID lpParam)
     {
         //std::cout << "Failed to read flash program files" << std::endl;
 		tempinfo.Format("Failed to read flash program files \r\n"  );
-		p_dlg->AppendTestInfo(tempinfo);
+		p_dlg->AppendTestInfo( tempinfo , TRUE);
         flmClose(devMask);
-
     }
 
     if(flmProgramSpawn(devMask, 0, 0, 0) != TFL_OK)
     {
         //std::cout << "Failed to spawn flash program thread" << std::endl;
 		tempinfo.Format("Failed to spawn flash program thread \r\n"  );
-		p_dlg->AppendTestInfo(tempinfo);
+		p_dlg->AppendTestInfo( tempinfo , TRUE);
         flmClose(devMask);
     }
 	
@@ -728,28 +730,32 @@ UINT  CBlueToolTestforJoyDlg::thd_Process(LPVOID lpParam)
                 {
                     ++devicesRunning;
                 }
-              
-				tempinfo.Format("dev %d progress = %d \r\n" , devIndex , progress );
-				//更新ui
+
+              	//更新ui
+				tempinfo.Format("device %d progress = %d \r\n" , devIndex , progress );
 				p_dlg->AppendTestInfo(tempinfo); 
+
             }
         }
         Sleep(1000);
     }
     while(devicesRunning > 0);
 	
-    std::cout << "Completed" << std::endl;
+    //std::cout << "Completed" << std::endl;
 	
     int32 error = flmGetLastError();
     if(error != TFL_OK)
     {
         
-		tempinfo.Format("Programming failed with error:%d Failed devices mask = %d \r\n" , error , flmGetBitErrorField() );
-		p_dlg->AppendTestInfo(tempinfo);
+		tempinfo.Format("failed Programming with error:%d Failed devices mask = %d \r\n" , error , flmGetBitErrorField() );
+		p_dlg->AppendTestInfo( tempinfo , TRUE);
         flmClose(devMask);
     }
 	
-    std::cout << "Successfully programmed devices" << std::endl;
+    //std::cout << "Successfully programmed devices" << std::endl;
+	tempinfo.Format("succed programmed devices\r\n"  );
+	p_dlg->AppendTestInfo( tempinfo );
+
     flmClose(devMask);
 
 	//合并文件。
@@ -760,27 +766,27 @@ UINT  CBlueToolTestforJoyDlg::thd_Process(LPVOID lpParam)
 		if(	psMergeFromFile( iHandle , "xpv\\sink_config_10001v4_stereo.psr" ) ==1)
 		{
 			//std::cout<<"ps merge sink_config_10001v4_stereo.psr all right "<<std::endl;
-			tempinfo.Format("ps merge sink_config_10001v4_stereo.psr all right \r\n" );
+			tempinfo.Format("succed ps merge sink_config_10001v4_stereo.psr all right \r\n" );
 			p_dlg->AppendTestInfo(tempinfo);
 		}
 		else
 		{
 			//std::cout<<"ps merge sink_config_10001v4_stereo.psr failed "<<std::endl;
-			tempinfo.Format("ps merge sink_config_10001v4_stereo.psr failed \r\n" );
-			p_dlg->AppendTestInfo(tempinfo);
+			tempinfo.Format("failed port %s ps merge sink_config_10001v4_stereo.psr\r\n", (*itr1).c_str());
+			p_dlg->AppendTestInfo(tempinfo, TRUE);
 		}
 
 		if(	psMergeFromFile( iHandle , "xpv\\sink_system_csr8670.psr" ) ==1)
 		{
 			//std::cout<<"ps merge sink_system_csr8670.psr all right "<<std::endl;
-			tempinfo.Format("ps merge sink_system_csr8670.psr all right  \r\n" );
+			tempinfo.Format("succed ps merge sink_system_csr8670.psr\r\n" );
 			p_dlg->AppendTestInfo(tempinfo);
 		}
 		else
 		{
 			//std::cout<<"ps merge sink_system_csr8670.psr failed "<<std::endl;
-			tempinfo.Format("ps merge sink_system_csr8670.psr failed  \r\n" );
-			p_dlg->AppendTestInfo(tempinfo);
+			tempinfo.Format("failed port %s ps merge sink_system_csr8670.psr\r\n" , (*itr1).c_str());
+			p_dlg->AppendTestInfo( tempinfo ,TRUE );
 		}  
 
 		closeTestEngine(iHandle);
@@ -1087,7 +1093,6 @@ void CBlueToolTestforJoyDlg::getHandle(CString &outInfo)
 			{
 				std::cout << "Programming failed with error: " << error << std::endl;
 				flClose();
-				/*	return -1;*/
 			}
 			
 			std::cout << "Successfully programmed device" << std::endl;
@@ -1140,10 +1145,7 @@ void CBlueToolTestforJoyDlg::getHandle(CString &outInfo)
 void CBlueToolTestforJoyDlg::OnButtonBurn() 
 {
 	// TODO: Add your control notification handler code here
-	//CreateThread(NULL, 0, thd_Process, 0, 0, NULL);
-//	this->SendMessage(WM_UPDATEINFO,0,0);
-//	SendMessge(::AfxGetMainWnd()->m_hWnd,WM_UPDATEINFO,0,0);
- 	AfxBeginThread( thd_Process , this );
+  	AfxBeginThread( thread_ProcessBurnFirm , this );
 }
 
 
@@ -1157,7 +1159,7 @@ LRESULT CBlueToolTestforJoyDlg::ui_callback(WPARAM,LPARAM)
 void CBlueToolTestforJoyDlg::readCVC(std::vector<std::string> &lst,int count)
 {
 	while(count--){
-		lst.push_back("3465 A979 BC24 C86D 01FF");
+		lst.push_back("111111");//push_back("3465 A979 BC24 C86D 01FF");
 	}
 }
 
@@ -1165,7 +1167,7 @@ void CBlueToolTestforJoyDlg::readCVC(std::vector<std::string> &lst,int count)
 void CBlueToolTestforJoyDlg::readMAC(std::vector<std::string> &lst,int count)
 {
 	while(count--){
-		lst.push_back("00025b00ff01");
+		lst.push_back("123456789");//push_back("00025b00ff01");
 	}
 }
 
@@ -1200,9 +1202,7 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	char* portsStr = new char[maxLen];
 	char* transStr = new char[maxLen]; 
 	
-	// 	char portsStr[256];
-	// 	char transStr[256]; 
-	
+ 
 	
 	memset(portsStr,0,maxLen);
 	int32 status = teGetAvailableSpiPorts(&maxLen, portsStr, transStr, &count);
@@ -1236,13 +1236,7 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	readMAC(m_mac,m_ports.size());
 	
 	
-	//初始化m_lists
-	// 	for(vector<std::string>::iterator portitr=m_ports.begin(),	\
-	// 			std::vector<std::string>::iterator macitr=m_mac.begin(),\
-	// 			std::vector<std::string>::iterator cvcitr=m_cvc.begin();\
-	// 		portitr!=m_ports.end()&&macitr!=m_mac.end()&&cvcitr!=m_cvc.end();
-	// 		portitr++,macitr++,cvcitr++
-	// 		)
+	//初始化m_lists 
 	std::vector<std::string>::iterator macitr=m_mac.begin();
 	std::vector<std::string>::iterator cvcitr=m_cvc.begin();
 	
@@ -1380,22 +1374,70 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 void CBlueToolTestforJoyDlg::clearStatus()
 {
 	m_ckport1.SetCheck(0);
+ 	m_edit_did1.SetWindowText(NULL);
+	m_edit_cvc1.SetWindowText(NULL);
+	m_edit_macaddr1.SetWindowText(NULL);
 	m_ckport2.SetCheck(0);
+	m_edit_did2.SetWindowText(NULL);
+	m_edit_cvc2.SetWindowText(NULL);
+	m_edit_macaddr2.SetWindowText(NULL);
 	m_ckport3.SetCheck(0);
+	m_edit_did3.SetWindowText(NULL);
+	m_edit_cvc3.SetWindowText(NULL);
+	m_edit_macaddr3.SetWindowText(NULL);
 	m_ckport4.SetCheck(0);
+	m_edit_did4.SetWindowText(NULL);
+	m_edit_cvc4.SetWindowText(NULL);
+	m_edit_macaddr4.SetWindowText(NULL);
 	m_ckport5.SetCheck(0);
+	m_edit_did5.SetWindowText(NULL);
+	m_edit_cvc5.SetWindowText(NULL);
+	m_edit_macaddr5.SetWindowText(NULL);
 	m_ckport6.SetCheck(0);
+	m_edit_did6.SetWindowText(NULL);
+	m_edit_cvc6.SetWindowText(NULL);
+	m_edit_macaddr6.SetWindowText(NULL);
 	m_ckport7.SetCheck(0);
+	m_edit_did7.SetWindowText(NULL);
+	m_edit_cvc7.SetWindowText(NULL);
+	m_edit_macaddr7.SetWindowText(NULL);
 	m_ckport8.SetCheck(0);
+	m_edit_did8.SetWindowText(NULL);
+	m_edit_cvc8.SetWindowText(NULL);
+	m_edit_macaddr8.SetWindowText(NULL);
 	m_ckport9.SetCheck(0);
+	m_edit_did9.SetWindowText(NULL);
+	m_edit_cvc9.SetWindowText(NULL);
+	m_edit_macaddr9.SetWindowText(NULL);
 	m_ckport10.SetCheck(0);
+	m_edit_did10.SetWindowText(NULL);
+	m_edit_cvc10.SetWindowText(NULL);
+	m_edit_macaddr10.SetWindowText(NULL);
 	m_ckport11.SetCheck(0);
+	m_edit_did11.SetWindowText(NULL);
+	m_edit_cvc11.SetWindowText(NULL);
+	m_edit_macaddr11.SetWindowText(NULL);
 	m_ckport12.SetCheck(0);
+	m_edit_did12.SetWindowText(NULL);
+	m_edit_cvc12.SetWindowText(NULL);
+	m_edit_macaddr12.SetWindowText(NULL);
 	m_ckport13.SetCheck(0);
+	m_edit_did13.SetWindowText(NULL);
+	m_edit_cvc13.SetWindowText(NULL);
+	m_edit_macaddr13.SetWindowText(NULL);
 	m_ckport14.SetCheck(0);
+	m_edit_did14.SetWindowText(NULL);
+	m_edit_cvc14.SetWindowText(NULL);
+	m_edit_macaddr14.SetWindowText(NULL);
 	m_ckport15.SetCheck(0);
+	m_edit_did15.SetWindowText(NULL);
+	m_edit_cvc15.SetWindowText(NULL);
+	m_edit_macaddr15.SetWindowText(NULL);
 	m_ckport16.SetCheck(0);
-	
+	m_edit_did16.SetWindowText(NULL);
+	m_edit_cvc16.SetWindowText(NULL);
+	m_edit_macaddr16.SetWindowText(NULL);
+
 }
 
 
@@ -1412,4 +1454,91 @@ void CBlueToolTestforJoyDlg::InitCtrl()
 	m_edit_global_burnfile.SetWindowText(s_curDir);
 	m_edit_global_burnname.SetWindowText(DEFAULT_BD_NAME);
 
+}
+
+void CBlueToolTestforJoyDlg::OnButtonWritecheck() 
+{
+	// TODO: Add your control notification handler code here
+	AfxBeginThread( thread_WriteCheckFreq , this );
+}
+
+
+
+
+/************************************************************************/
+/*处理写入配置信息和频率校验
+                                                                        */
+/************************************************************************/
+UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
+{
+	// TODO: Add your control notification handler code here
+	CBlueToolTestforJoyDlg *p_dlg = (CBlueToolTestforJoyDlg *)lpParam;  
+	uint32 iHandle(0);
+	CString tempinfo;
+	
+	for(std::vector<BD_Item>::iterator itr1=p_dlg->m_itemlists.begin() ; itr1!=p_dlg->m_itemlists.end() ; itr1++)
+	{
+		int ret=0;
+		iHandle = openTestEngineSpi( atoi( itr1->getPort().c_str() ) , 0 , SPI_USB ); 
+		//写入蓝牙名称
+		uint16 bd_name[20]={'\0'};
+		strcpy( (char*)bd_name , DEFAULT_BD_NAME );
+		if(psWrite(iHandle, PSKEY_DEVICE_NAME, PS_STORES_I, 20, bd_name) == TE_OK)
+		{
+			tempinfo.Format("Successfully wrote key PSKEY_DEVICE_NAME \r\n" );
+			p_dlg->AppendTestInfo(tempinfo);
+		}
+		else
+		{
+			tempinfo.Format("Failed %s to write key PSKEY_DEVICE_NAME\r\n" ,itr1->getPort().c_str() );
+			p_dlg->AppendTestInfo( tempinfo , TRUE );
+		}
+		
+		//设置配对密码
+		uint16 bd_pwd[20]={'\0'};
+		strcpy( (char*)bd_pwd , DEFAULT_BD_PWD );
+		if(psWrite( iHandle , PSKEY_FIXED_PIN , PS_STORES_I, 20 , bd_pwd) == TE_OK)
+		{ 
+			tempinfo.Format("Successfully wrote key PSKEY_FIXED_PIN \r\n" );
+			p_dlg->AppendTestInfo( tempinfo  );
+		}
+		else
+		{ 
+			tempinfo.Format("Failed %s to write key PSKEY_FIXED_PIN \r\n",itr1->getPort().c_str() );
+			p_dlg->AppendTestInfo( tempinfo , TRUE);
+		}
+		
+		//cvc码（先做读取操作）
+		uint16 bd_cvc[20]={'\0'};
+		strcpy( (char*)bd_cvc , itr1->getCVC().c_str() );
+		if(psWrite( iHandle , PSKEY_DSP48 , PS_STORES_I, 20 , bd_cvc ) == TE_OK)
+		{ 
+			tempinfo.Format("Successfully wrote key PSKEY_DSP48 \r\n" );
+			p_dlg->AppendTestInfo( tempinfo );
+		}
+		else
+		{ 
+			tempinfo.Format("Failed %s to write key PSKEY_DSP48 \r\n" ,itr1->getPort().c_str() );
+			p_dlg->AppendTestInfo(tempinfo , TRUE);
+		}
+		
+		//蓝牙地址 
+		uint16 bd_addr[4]={'\0'};
+		strcpy( (char*)bd_addr , itr1->getMac().c_str() );
+		if(psWrite( iHandle , PSKEY_BDADDR , PS_STORES_I,  4 , bd_addr ) == TE_OK)
+		{ 
+			tempinfo.Format("Successfully wrote key PSKEY_BDADDR %s \r\n" , itr1->getMac().c_str() );
+			p_dlg->AppendTestInfo(tempinfo);
+		}
+		else
+		{ 
+			tempinfo.Format("Failed %s to write key PSKEY_BDADDR \r\n" ,itr1->getPort().c_str() );
+			p_dlg->AppendTestInfo(tempinfo , TRUE );
+		}
+		
+		closeTestEngine(iHandle);
+		
+	}
+	
+	return 1;
 }
