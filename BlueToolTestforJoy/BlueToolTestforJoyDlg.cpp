@@ -62,7 +62,31 @@ END_MESSAGE_MAP()
 CBlueToolTestforJoyDlg::CBlueToolTestforJoyDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CBlueToolTestforJoyDlg::IDD, pParent)
 {
+	m_Conn.SetConnectionString("Provider=Microsoft.Jet.OLEDB.4.0; Data Source= blueinfo.mdb;Jet OLEDB:DataBase password=;");
+	m_Conn.Open("","","",ConnectOption::adConnectUnspecified); 
+    m_Cmd.SetActiveConnection(m_Conn);
+	
+
+
+	
+	CString sql="insert into t_mac(mac,used,deviceid,used_time) values('";
+	sql+="11111";
+	sql+="','";
+    sql+="songtzu";
+    sql+="','";
+    sql+="yes";
+	sql+="','";
+	sql+="20141205";
+    sql+="')";
+	
+	m_Cmd.SetCommandText(sql);
+	long rows=0;
+	m_Cmd.ExecuteUpdate(rows,CommandType::adCmdText,m_Rst);
+
+
+
 	m_lines=0;
+	m_hardcheckindex=0;
 	//{{AFX_DATA_INIT(CBlueToolTestforJoyDlg)
 	//}}AFX_DATA_INIT
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
@@ -156,6 +180,14 @@ BEGIN_MESSAGE_MAP(CBlueToolTestforJoyDlg, CDialog)
 	ON_MESSAGE(WM_UPDATEINFO , ui_callback)
 	ON_BN_CLICKED(IDC_BUTTON_DETECTDEVICE, OnButtonDetectdevice)
 	ON_BN_CLICKED(IDC_BUTTON_WRITECHECK, OnButtonWritecheck)
+	ON_BN_CLICKED(IDC_BUTTON_NEXTDC, OnButtonNextdc)
+	ON_BN_CLICKED(IDC_BUTTON_FORMER, OnButtonFormer)
+	ON_BN_CLICKED(IDC_BUTTON_HARDBTNALL, OnButtonHardbtnall)
+	ON_BN_CLICKED(IDC_BUTTON_HARDBTN1, OnButtonHardbtn1)
+	ON_BN_CLICKED(IDC_BUTTON_HARDBTN2, OnButtonHardbtn2)
+	ON_BN_CLICKED(IDC_BUTTON_HARDBTN3, OnButtonHardbtn3)
+	ON_BN_CLICKED(IDC_BUTTON_CALL, OnButtonCall)
+	ON_BN_CLICKED(IDC_BUTTON_HARDBTNBEGIN, OnButtonHardbtnbegin)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -658,21 +690,15 @@ void CBlueToolTestforJoyDlg::parseBrackets(std::vector<std::string> &vt)
 
 UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
 {
-  
- 
-	int ret=0;
-
-	uint32 iHandle(0);
-
-	CString tempinfo;
 	
+	
+	int ret=0;
+	uint32 iHandle(0);
+	CString tempinfo;
 	CBlueToolTestforJoyDlg *p_dlg = (CBlueToolTestforJoyDlg *)lpParam;  
-
-
-//	CString str_burnfilepath=
-
+	
 	//多路烧录文件。
-	bitset<32> bitvec;  //32 bits,all zero
+	bitset<16> bitvec;  //32 bits,all zero
 	for(int loop_bs=0 ; loop_bs<p_dlg->m_ports.size() ; loop_bs++ )
 	{
 		bitvec.set(loop_bs);
@@ -682,38 +708,30 @@ UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
 	if(flmOpen(devMask, 26, TFL_SPI_USB) != TFL_OK)
     {
         //std::cout << "Failed to open devices (" << flmGetBitErrorField() << ")" << std::endl;
-		tempinfo.Format("Failed to open devices %d \r\n" ,flmGetBitErrorField() );
+		tempinfo.Format("打开设备%s失败 %d \r\n" , bitvec.to_string().c_str() , flmGetBitErrorField() );
 		p_dlg->AppendTestInfo( tempinfo , TRUE );
+		return -1;
     }
-
-// 	//擦除fl中的内容
-// 	if( (ret= flmEraseSpawn( devMask ) ) !=TFL_OK  )
-// 	{
-// 		tempinfo.Format("擦除fl中的内容失败 %d \r\n" ,ret );
-// 		p_dlg->AppendTestInfo(tempinfo,FALSE);
-// 	}
-// 	else
-// 	{
-// 		tempinfo.Format("擦除内容成功 %d \r\n" ,ret );
-// 		p_dlg->AppendTestInfo(tempinfo);
-// 	}
-
-
+	
     if(flmReadProgramFiles("xpv\\merge.xpv") != TFL_OK)
     {
         //std::cout << "Failed to read flash program files" << std::endl;
-		tempinfo.Format("Failed to read flash program files \r\n"  );
+		tempinfo.Format("读取烧录文件失败\r\n"  );
 		p_dlg->AppendTestInfo( tempinfo , TRUE);
         flmClose(devMask);
+		return -1;
     }
-
+	
     if(flmProgramSpawn(devMask, 0, 0, 0) != TFL_OK)
     {
         //std::cout << "Failed to spawn flash program thread" << std::endl;
-		tempinfo.Format("Failed to spawn flash program thread \r\n"  );
+		tempinfo.Format("烧录程序到设备失败\r\n"  );
 		p_dlg->AppendTestInfo( tempinfo , TRUE);
         flmClose(devMask);
-    }
+		return -1;
+    } 
+
+	
 	
     uint16 devicesRunning;
     int32 progress;
@@ -730,18 +748,16 @@ UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
                 {
                     ++devicesRunning;
                 }
-
-              	//更新ui
-				tempinfo.Format("device %d progress = %d \r\n" , devIndex , progress );
+				
+				//更新ui
+				tempinfo.Format("设备编号=%d 进度= %d\r\n" , devIndex , progress );
 				p_dlg->AppendTestInfo(tempinfo); 
-
+				
             }
         }
         Sleep(1000);
     }
     while(devicesRunning > 0);
-	
-    //std::cout << "Completed" << std::endl;
 	
     int32 error = flmGetLastError();
     if(error != TFL_OK)
@@ -750,50 +766,63 @@ UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
 		tempinfo.Format("failed Programming with error:%d Failed devices mask = %d \r\n" , error , flmGetBitErrorField() );
 		p_dlg->AppendTestInfo( tempinfo , TRUE);
         flmClose(devMask);
-    }
+    } 
 	
-    //std::cout << "Successfully programmed devices" << std::endl;
-	tempinfo.Format("succed programmed devices\r\n"  );
+	tempinfo.Format("烧录成功,执行合并配置文件...\r\n"  );
 	p_dlg->AppendTestInfo( tempinfo );
-
+	
     flmClose(devMask);
-
+	
 	//合并文件。
 	for(vector<std::string>::iterator itr1=p_dlg->m_ports.begin();itr1!=p_dlg->m_ports.end();itr1++)
 	{
 		int ret=0;
 		iHandle = openTestEngineSpi(atoi((*itr1).c_str()), 0, SPI_USB );
-		if(	psMergeFromFile( iHandle , "xpv\\sink_config_10001v4_stereo.psr" ) ==1)
+	
+		if (iHandle)
 		{
-			//std::cout<<"ps merge sink_config_10001v4_stereo.psr all right "<<std::endl;
-			tempinfo.Format("succed ps merge sink_config_10001v4_stereo.psr all right \r\n" );
-			p_dlg->AppendTestInfo(tempinfo);
+			if(	psMergeFromFile( iHandle , "xpv\\sink_config_10001v4_stereo.psr" ) ==1)
+			{
+				//std::cout<<"ps merge sink_config_10001v4_stereo.psr all right "<<std::endl;
+				tempinfo.Format("%s设备成功合并sink_config_10001v4_stereo.psr\r\n" , (*itr1).c_str() );
+				p_dlg->AppendTestInfo(tempinfo);
+			}
+			else
+			{
+				//std::cout<<"ps merge sink_config_10001v4_stereo.psr failed "<<std::endl;
+				tempinfo.Format("%s设备合并失败sink_config_10001v4_stereo.psr\r\n", (*itr1).c_str());
+				p_dlg->AppendTestInfo(tempinfo, TRUE);
+			}
+			
+			if(	psMergeFromFile( iHandle , "xpv\\sink_system_csr8670.psr" ) ==1)
+			{
+				//std::cout<<"ps merge sink_system_csr8670.psr all right "<<std::endl;
+				tempinfo.Format("%s设备成功合并sink_system_csr8670.psr\r\n" , (*itr1).c_str() );
+				p_dlg->AppendTestInfo(tempinfo);
+			}
+			else
+			{ 
+				tempinfo.Format("%s设备合并失败sink_system_csr8670.psr\r\n" , (*itr1).c_str());
+				p_dlg->AppendTestInfo( tempinfo ,TRUE );
+			}  
+		
+			closeTestEngine(iHandle);
 		}
 		else
 		{
-			//std::cout<<"ps merge sink_config_10001v4_stereo.psr failed "<<std::endl;
-			tempinfo.Format("failed port %s ps merge sink_config_10001v4_stereo.psr\r\n", (*itr1).c_str());
-			p_dlg->AppendTestInfo(tempinfo, TRUE);
+			tempinfo.Format("%s设备执行合并打开设备失败\r\n" , (*itr1).c_str() );
+			p_dlg->AppendTestInfo( tempinfo,true  );
 		}
-
-		if(	psMergeFromFile( iHandle , "xpv\\sink_system_csr8670.psr" ) ==1)
-		{
-			//std::cout<<"ps merge sink_system_csr8670.psr all right "<<std::endl;
-			tempinfo.Format("succed ps merge sink_system_csr8670.psr\r\n" );
-			p_dlg->AppendTestInfo(tempinfo);
-		}
-		else
-		{
-			//std::cout<<"ps merge sink_system_csr8670.psr failed "<<std::endl;
-			tempinfo.Format("failed port %s ps merge sink_system_csr8670.psr\r\n" , (*itr1).c_str());
-			p_dlg->AppendTestInfo( tempinfo ,TRUE );
-		}  
-
-		closeTestEngine(iHandle);
-
+		
+		
 	}
- 
+	
     flmClose(devMask);
+	
+
+	
+	tempinfo.Format("烧录文件执行结束\r\n\r\n" );
+	p_dlg->AppendTestInfo( tempinfo );
 
 	return 0;
 }
@@ -1176,7 +1205,10 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 {
 	// TODO: Add your control notification handler code here
 	
+	clearStatus();
+
 	CString strfile,strname;
+
 	m_edit_global_burnfile.GetWindowText(strfile);
 	
 	m_edit_global_burnname.GetWindowText(strname);
@@ -1187,14 +1219,7 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 		return;
 	}
 	
-	clearStatus();
-	m_ports.clear();
-	m_trans.clear();
-	m_cvc.clear();
-	m_mac.clear();
-	m_itemlists.clear();
-
-
+ 
 
 	uint32 iHandle(0);
 	uint16 maxLen(256);
@@ -1217,8 +1242,18 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	}
 	if( status != TE_OK || count == 0 )
 	{ 
-		delete[] portsStr;
-		delete[] transStr; 
+		if (portsStr)
+		{
+			delete[] portsStr;
+			portsStr=NULL;
+		}
+		if (transStr)
+		{
+			delete[] transStr; 
+			transStr=NULL;
+		}
+		AppendTestInfo("打开设备失败\r\n",true);
+		return  ;
 	} 
 	
 	// Split up the comma separated strings of ports / transport options
@@ -1361,9 +1396,17 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 		}
 		
 	}
-	delete[] portsStr;
-	delete[] transStr; 
-	
+	if (portsStr)
+	{
+		delete[] portsStr;
+		portsStr=NULL;
+	}
+	if (transStr)
+	{
+		delete[] transStr; 
+		transStr=NULL;
+	}
+	AppendTestInfo("准备完成\r\n");
 }
 
 
@@ -1373,6 +1416,15 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 
 void CBlueToolTestforJoyDlg::clearStatus()
 {
+
+	m_ports.clear();
+	m_trans.clear();
+	m_cvc.clear();
+	m_mac.clear();
+	m_itemlists.clear();
+
+	m_hardcheckindex = 0 ;
+
 	m_ckport1.SetCheck(0);
  	m_edit_did1.SetWindowText(NULL);
 	m_edit_cvc1.SetWindowText(NULL);
@@ -1474,102 +1526,463 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 	// TODO: Add your control notification handler code here
 	CBlueToolTestforJoyDlg *p_dlg = (CBlueToolTestforJoyDlg *)lpParam;  
 	uint32 iHandle(0);
-	CString tempinfo;
+	CString tempinfo; 
 	
 	for(std::vector<BD_Item>::iterator itr1=p_dlg->m_itemlists.begin() ; itr1!=p_dlg->m_itemlists.end() ; itr1++)
 	{
 		int ret=0;
 		iHandle = openTestEngineSpi( atoi( itr1->getPort().c_str() ) , 0 , SPI_USB ); 
-		//写入蓝牙名称
-		uint16 bd_name[20]={'\0'};
-		strcpy( (char*)bd_name , DEFAULT_BD_NAME );
-		if(psWrite(iHandle, PSKEY_DEVICE_NAME, PS_STORES_I, 20, bd_name) == TE_OK)
+		if (iHandle)
 		{
-			tempinfo.Format("Successfully wrote key PSKEY_DEVICE_NAME \r\n" );
-			p_dlg->AppendTestInfo(tempinfo);
+
+			//写入蓝牙名称...蓝牙名字不得超过四十个字节！
+			CString str_bdName;
+			p_dlg->m_edit_global_burnname.GetWindowText(str_bdName);
+			uint16 bd_name[20]={'\0'};
+			strcpy( (char*)bd_name , str_bdName.GetBuffer(0) );
+			if(psWrite(iHandle, PSKEY_DEVICE_NAME, PS_STORES_I, 20, bd_name) == TE_OK)
+			{
+				tempinfo.Format("%s设备名写入成功\r\n" , itr1->getPort().c_str() );
+				p_dlg->AppendTestInfo(tempinfo);
+			}
+			else
+			{
+				tempinfo.Format("%s写入设备名失败\r\n" , itr1->getPort().c_str() );
+				p_dlg->AppendTestInfo( tempinfo , TRUE );
+			}
+			
+			//设置配对密码
+			uint16 bd_pwd[20]={'\0'};
+			strcpy( (char*)bd_pwd , DEFAULT_BD_PWD );
+			if(psWrite( iHandle , PSKEY_FIXED_PIN , PS_STORES_I, 20 , bd_pwd) == TE_OK)
+			{ 
+				tempinfo.Format("%s写入配对密码成功\r\n" , itr1->getPort().c_str() );
+				p_dlg->AppendTestInfo( tempinfo  );
+			}
+			else
+			{ 
+				tempinfo.Format("%s写入配对密码失败\r\n",itr1->getPort().c_str() );
+				p_dlg->AppendTestInfo( tempinfo , TRUE);
+			}
+			
+			//cvc码（先做读取操作）
+			uint16 bd_cvc[20]={'\0'};
+			strcpy( (char*)bd_cvc , itr1->getCVC().c_str() );
+			if(psWrite( iHandle , PSKEY_DSP48 , PS_STORES_I, 20 , bd_cvc ) == TE_OK)
+			{ 
+				tempinfo.Format("%s写入CVC码成功\r\n" , itr1->getPort().c_str() );
+				p_dlg->AppendTestInfo( tempinfo );
+			}
+			else
+			{ 
+				tempinfo.Format("%s写入CVC码失败\r\n" , itr1->getPort().c_str() );
+				p_dlg->AppendTestInfo(tempinfo , TRUE);
+			}
+			
+			//蓝牙地址
+			uint16 bd_addr[4]={'\0'};
+			strcpy( (char*)bd_addr , itr1->getMac().c_str() );
+			if(psWrite( iHandle , PSKEY_BDADDR , PS_STORES_I,  4 , bd_addr ) == TE_OK)
+			{ 
+				tempinfo.Format("%s写入蓝牙地址%s成功\r\n" , itr1->getPort().c_str() , itr1->getMac().c_str() );
+				p_dlg->AppendTestInfo(tempinfo);
+			}
+			else
+			{ 
+				tempinfo.Format("%s写入蓝牙地址失败\r\n" ,itr1->getPort().c_str() );
+				p_dlg->AppendTestInfo(tempinfo , TRUE );
+			}
+
+			closeTestEngine(iHandle);
+
+		}
+	
+	}
+	
+	tempinfo.Format("配置读写操作结束\r\n\r\n" );
+	p_dlg->AppendTestInfo(tempinfo );
+
+	return 1;
+}
+
+
+
+
+void CBlueToolTestforJoyDlg::CheckFreq()
+{
+	/*
+	先设置trim offset to crystal frequency =0
+	then read TXSTART actual freq, value is b
+	then we execute "set Xtal Offset", the actual freq value b.
+	*/
+
+
+}
+
+void CBlueToolTestforJoyDlg::OnButtonNextdc() 
+{
+	// TODO: Add your control notification handler code here
+	m_hardcheckindex++;
+}
+
+void CBlueToolTestforJoyDlg::OnButtonFormer() 
+{
+	// TODO: Add your control notification handler code here
+	if (m_hardcheckindex>0)
+	{
+		m_hardcheckindex--;
+	}
+}
+
+
+/*
+00000000000000000100000000010000 
+00000000000000000010000000010011 
+00000000000000000001000000010000 
+00000000000000000000100000010011
+*/
+void CBlueToolTestforJoyDlg::OnButtonHardbtnall() 
+{
+	// TODO: Add your control notification handler code here
+	//测试电压等参数。
+	//GiveHint(0);
+	AfxBeginThread( GiveHint , this );
+
+	AfxBeginThread(thread_HardwareCheck , this );
+
+	return;
+
+
+}
+
+
+
+
+
+void CBlueToolTestforJoyDlg::OnButtonHardbtn1() 
+{
+	// TODO: Add your control notification handler code here
+	//测试电压等参数。
+	if (m_hardcheckindex>=m_itemlists.size())
+	{
+		AppendTestInfo( "测试设备越界\r\n" );
+		return;
+	}
+	CString tempinfo;
+	uint32 direction=0;
+	uint32 value=0;
+	uint32 iHandle=0;
+	iHandle = openTestEngineSpi( atoi( m_itemlists.at(m_hardcheckindex).getPort().c_str() ) , 0 , SPI_USB ); 
+	if(iHandle != 0)
+	{
+		
+		// Get the direction and value of the PIO lines.
+		int32 success = bccmdGetPio32(iHandle, &direction, &value);
+		if(success == TE_OK)
+		{
+			std::bitset<32> bits(value);
+			//00000000000000000111000100010000 
+			if (!bits.test(BTN_VOICEDOWN))
+			{
+				AppendTestInfo("音量-异常\r\n" ,true);
+			}else{
+				AppendTestInfo("音量-正常\r\n");
+			}
+			
 		}
 		else
 		{
-			tempinfo.Format("Failed %s to write key PSKEY_DEVICE_NAME\r\n" ,itr1->getPort().c_str() );
-			p_dlg->AppendTestInfo( tempinfo , TRUE );
-		}
+			tempinfo.Format("failed bccmdGetPio32 %d %d \r\n" , direction , value);
+			AppendTestInfo(tempinfo );
+		} 
 		
-		//设置配对密码
-		uint16 bd_pwd[20]={'\0'};
-		strcpy( (char*)bd_pwd , DEFAULT_BD_PWD );
-		if(psWrite( iHandle , PSKEY_FIXED_PIN , PS_STORES_I, 20 , bd_pwd) == TE_OK)
-		{ 
-			tempinfo.Format("Successfully wrote key PSKEY_FIXED_PIN \r\n" );
-			p_dlg->AppendTestInfo( tempinfo  );
+	}
+	else
+	{
+		AppendTestInfo( "设备连接失败\r\n" , TRUE ) ;
+	}
+	closeTestEngine(iHandle);
+}
+
+void CBlueToolTestforJoyDlg::OnButtonHardbtn2() 
+{
+	// TODO: Add your control notification handler code here
+	if (m_hardcheckindex>=m_itemlists.size())
+	{
+		AppendTestInfo( "测试设备越界\r\n" );
+		return;
+	}
+	CString tempinfo;
+	uint32 direction=0;
+	uint32 value=0;
+	uint32 iHandle=0;
+	iHandle = openTestEngineSpi( atoi( m_itemlists.at(m_hardcheckindex).getPort().c_str() ) , 0 , SPI_USB ); 
+	if(iHandle != 0)
+	{
+		
+		// Get the direction and value of the PIO lines.
+		int32 success = bccmdGetPio32(iHandle, &direction, &value);
+		if(success == TE_OK)
+		{
+			std::bitset<32> bits(value);
+			//00000000000000000111000100010000 
+			if (!bits.test(BTN_VOICEUP))
+			{
+				AppendTestInfo("音量+异常\r\n" ,true);
+			}
+			else
+			{
+				AppendTestInfo("音量+正常\r\n");
+			}
+			
 		}
 		else
-		{ 
-			tempinfo.Format("Failed %s to write key PSKEY_FIXED_PIN \r\n",itr1->getPort().c_str() );
-			p_dlg->AppendTestInfo( tempinfo , TRUE);
-		}
+		{
+			tempinfo.Format("failed bccmdGetPio32 %d %d \r\n" , direction , value);
+			AppendTestInfo(tempinfo );
+		} 
 		
-		//cvc码（先做读取操作）
-		uint16 bd_cvc[20]={'\0'};
-		strcpy( (char*)bd_cvc , itr1->getCVC().c_str() );
-		if(psWrite( iHandle , PSKEY_DSP48 , PS_STORES_I, 20 , bd_cvc ) == TE_OK)
-		{ 
-			tempinfo.Format("Successfully wrote key PSKEY_DSP48 \r\n" );
-			p_dlg->AppendTestInfo( tempinfo );
+	}
+	else
+	{
+		AppendTestInfo( "设备连接失败\r\n" , TRUE ) ;
+	}
+	closeTestEngine(iHandle);
+}
+
+void CBlueToolTestforJoyDlg::OnButtonHardbtn3() 
+{
+	// TODO: Add your control notification handler code here
+	if (m_hardcheckindex>=m_itemlists.size())
+	{
+		AppendTestInfo( "测试设备越界\r\n" );
+		return;
+	}
+	CString tempinfo;
+	uint32 direction=0;
+	uint32 value=0;
+	uint32 iHandle=0;
+	iHandle = openTestEngineSpi( atoi( m_itemlists.at(m_hardcheckindex).getPort().c_str() ) , 0 , SPI_USB ); 
+	if(iHandle != 0)
+	{
+		
+		// Get the direction and value of the PIO lines.
+		int32 success = bccmdGetPio32(iHandle, &direction, &value);
+		if(success == TE_OK)
+		{
+			std::bitset<32> bits(value);
+			//00000000000000000111000100010000 
+			if (!bits.test(BTN_MSG))
+			{
+				AppendTestInfo("消息键异常\r\n" ,true);
+			}else{
+				AppendTestInfo("消息键正常\r\n");
+			}
+			
 		}
 		else
-		{ 
-			tempinfo.Format("Failed %s to write key PSKEY_DSP48 \r\n" ,itr1->getPort().c_str() );
-			p_dlg->AppendTestInfo(tempinfo , TRUE);
-		}
+		{
+			tempinfo.Format("failed bccmdGetPio32 %d %d \r\n" , direction , value);
+			AppendTestInfo(tempinfo );
+		} 
 		
-		//蓝牙地址 
-		uint16 bd_addr[4]={'\0'};
-		strcpy( (char*)bd_addr , itr1->getMac().c_str() );
-		if(psWrite( iHandle , PSKEY_BDADDR , PS_STORES_I,  4 , bd_addr ) == TE_OK)
-		{ 
-			tempinfo.Format("Successfully wrote key PSKEY_BDADDR %s \r\n" , itr1->getMac().c_str() );
-			p_dlg->AppendTestInfo(tempinfo);
-		}
-		else
-		{ 
-			tempinfo.Format("Failed %s to write key PSKEY_BDADDR \r\n" ,itr1->getPort().c_str() );
-			p_dlg->AppendTestInfo(tempinfo , TRUE );
-		}
-		
+	}
+	else
+	{
+		AppendTestInfo( "设备连接失败\r\n" , TRUE ) ;
+	}
+	closeTestEngine(iHandle);
+}
 
 
 
 
-		//测试电压等参数。
-		tempinfo.Format("  bccmdGetPio32  \r\n" );
-		p_dlg->AppendTestInfo(tempinfo );
-		uint32 direction=0;
-        uint32 value=0;
-		if(iHandle != 0)
-        {
-              
-            // Get the direction and value of the PIO lines.
-            int32 success = bccmdGetPio32(iHandle, &direction, &value);
-            if(success == TE_OK)
-            {
-               // cout << "Direction = " << direction << endl;
-                //cout << "Value = " << value << endl;
-				tempinfo.Format("succed bccmdGetPio32 %d %d \r\n" , direction , value);
-				p_dlg->AppendTestInfo(tempinfo );
-            }else{
+
+
+/************************************************************************/
+/*硬件测试
+	暂时未使用                                                          */
+/************************************************************************/
+UINT CBlueToolTestforJoyDlg::thread_HardwareCheck(LPVOID lpParam)
+{
+	CBlueToolTestforJoyDlg *p_dlg = (CBlueToolTestforJoyDlg *)lpParam;  
+	//测试电压等参数。
+	if (p_dlg->m_hardcheckindex>=p_dlg->m_itemlists.size())
+	{
+		p_dlg->AppendTestInfo( "测试设备越界 " );
+		return -1;
+	}
+	CString tempinfo;
+	
+	std::bitset<32> totalbits(0);
+	uint32 direction=0;
+	uint32 value=0;
+	uint32 iHandle=0;
+	iHandle = openTestEngineSpi( atoi( ( p_dlg->m_itemlists).at(p_dlg->m_hardcheckindex).getPort().c_str() ) , 0 , SPI_USB ); 
+	if(iHandle != 0)
+	{
+		int loop = 100;
+		while (loop--)
+		{
+			// Get the direction and value of the PIO lines.
+			int32 success = bccmdGetPio32(iHandle, &direction, &value);
+			if(success == TE_OK)
+			{
+				std::bitset<32> bit(value);
+				//00000000000000000111000100010000 
+				if (bit.test(BTN_CALL))
+				{
+					if (!totalbits.test(BTN_CALL))
+					{
+						totalbits.set(BTN_CALL);
+						p_dlg->AppendTestInfo("呼叫键按下\r\n");
+					}
+					
+				}
+				if (bit.test(BTN_VOICEDOWN))
+				{
+					if (!totalbits.test(BTN_VOICEDOWN))
+					{ 
+						totalbits.set(BTN_VOICEDOWN);
+						p_dlg->AppendTestInfo("音量-键按下\r\n");
+					}
+				}
+				if (bit.test(BTN_VOICEUP))
+				{
+					if (!totalbits.test(BTN_VOICEUP))
+					{
+						totalbits.set(BTN_VOICEUP);
+						p_dlg->AppendTestInfo("音量+键按下\r\n");
+					}
+					
+				}
+				if (bit.test(BTN_MSG))
+				{
+					if (!totalbits.test(BTN_MSG))
+					{
+						totalbits.set(BTN_MSG);
+						p_dlg->AppendTestInfo("消息键按下\r\n");
+					}
+					
+				}
+				if (totalbits.test(11)&&totalbits.test(12)&&totalbits.test(13)&&totalbits.test(14))
+				{
+					p_dlg->AppendTestInfo("所有按键测试正常\r\n");
+					break;
+				}
+				Sleep(50);
+			} 			
+			else
+			{
 				tempinfo.Format("failed bccmdGetPio32 %d %d \r\n" , direction , value);
 				p_dlg->AppendTestInfo(tempinfo );
 			} 
-            
-        }
+		}
+	}
+	else
+	{
+		p_dlg->AppendTestInfo( "设备连接失败\r\n" , TRUE ) ;
+	}
+	closeTestEngine(iHandle);
+}
+
+
+
+
+
+UINT  CBlueToolTestforJoyDlg::GiveHint(LPVOID lpParam)
+{
+	
+	CBlueToolTestforJoyDlg *p_dlg = (CBlueToolTestforJoyDlg *)lpParam;  
+	uint32 direction=0xFFFF ,fdirection=0 ;
+	uint32 cvalue=0,fvalue=0;
+	uint32 iHandle=0;
+	uint32 pioMask  ;
+	uint32 errLines;
+	int32 success=0;
+	std::bitset<32> bits(1);
+	//bits.set();
+	bits.set(0);
+	bits.set(1);
+	
+	pioMask  = bits.to_ulong();
+	cvalue = bits.to_ulong();
+	iHandle = openTestEngineSpi( atoi( p_dlg->m_itemlists.at(p_dlg->m_hardcheckindex).getPort().c_str() ) , 0 , SPI_USB ); 
+	
+	if(iHandle)
+	{
 		
-
-
-
-
-		closeTestEngine(iHandle);
-		
+		//备份当前PIO的数值
+		success = bccmdGetPio32(iHandle, &fdirection, &fvalue);
+	 
+		success = bccmdSetPio32(iHandle, pioMask, direction, cvalue, &errLines);
+		// Checks if any lines could not be mapped as PIOs
+		if(success != TE_OK)
+		{
+			// Checks which PIO lines could not be set as input or output
+			
+		}
+		else
+		{
+			Sleep(3000);
+			success = bccmdSetPio32(iHandle, pioMask, fdirection, fvalue, &errLines);
+		}
 	}
 	
-	return 1;
+	closeTestEngine(iHandle);
+	
+	return 0;
+}
+
+void CBlueToolTestforJoyDlg::OnButtonCall() 
+{
+	// TODO: Add your control notification handler code here
+	if (m_hardcheckindex>=m_itemlists.size())
+	{
+		AppendTestInfo( "测试设备越界\r\n" );
+		return;
+	}
+	CString tempinfo;
+	uint32 direction=0;
+	uint32 value=0;
+	uint32 iHandle=0;
+	iHandle = openTestEngineSpi( atoi( m_itemlists.at(m_hardcheckindex).getPort().c_str() ) , 0 , SPI_USB ); 
+	if(iHandle != 0)
+	{
+		
+		// Get the direction and value of the PIO lines.
+		int32 success = bccmdGetPio32(iHandle, &direction, &value);
+		if(success == TE_OK)
+		{
+			std::bitset<32> bits(value);
+			//00000000000000000111000100010000 
+			if (!bits.test(BTN_CALL))
+			{
+				AppendTestInfo("呼叫键异常\r\n" ,true);
+			}else{
+				AppendTestInfo("呼叫键正常\r\n");
+			}
+			
+		}
+		else
+		{
+			tempinfo.Format("failed bccmdGetPio32 %d %d \r\n" , direction , value);
+			AppendTestInfo(tempinfo );
+		} 
+		
+	}
+	else
+	{
+		AppendTestInfo( "设备连接失败\r\n" , TRUE ) ;
+	}
+	closeTestEngine(iHandle);
+}
+
+
+ 
+
+void CBlueToolTestforJoyDlg::OnButtonHardbtnbegin() 
+{
+	// TODO: Add your control notification handler code here
+	AfxBeginThread( GiveHint , this );
 }

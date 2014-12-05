@@ -6,33 +6,11 @@
 --------------------Configuration: BlueToolTestforJoy - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSPC66F.tmp" with contents
-[
-/nologo /MDd /W3 /Gm /GX /ZI /Od /I "./blue_dir/include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"./temp/Debug/BlueToolTestforJoy.pch" /Yu"stdafx.h" /Fo"./temp/Debug/" /Fd"./temp/Debug/" /FD /GZ /c 
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BlueToolTestforJoyDlg.cpp"
-]
-Creating command line "cl.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSPC66F.tmp" 
-Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSPC670.tmp" with contents
-[
-TestEngine.lib TestFlash.lib /nologo /subsystem:windows /incremental:yes /pdb:"Debug/BlueToolTestforJoy.pdb" /debug /machine:I386 /out:"Debug/BlueToolTestforJoy.exe" /pdbtype:sept /libpath:".\blue_dir\lib" 
-.\temp\Debug\BD_Item.obj
-.\temp\Debug\BlueToolTestforJoy.obj
-.\temp\Debug\BlueToolTestforJoyDlg.obj
-.\temp\Debug\StdAfx.obj
-.\temp\Debug\BlueToolTestforJoy.res
-]
-Creating command line "link.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSPC670.tmp"
-<h3>Output Window</h3>
-Compiling...
-BlueToolTestforJoyDlg.cpp
-Linking...
-LINK : fatal error LNK1168: cannot open Debug/BlueToolTestforJoy.exe for writing
-Error executing link.exe.
 
 
 
 <h3>Results</h3>
-BlueToolTestforJoy.exe - 1 error(s), 0 warning(s)
+BlueToolTestforJoy.exe - 0 error(s), 0 warning(s)
 </pre>
 </body>
 </html>

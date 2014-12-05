@@ -99,7 +99,11 @@
 #define IDC_BUTTON_HARDBTN1             1123
 #define IDC_BUTTON_HARDBTN2             1124
 #define IDC_BUTTON_HARDBTN3             1125
-#define IDC_BUTTON_HARDBTN4             1126
+#define IDC_BUTTON_HARDBTNBEGIN         1126
+#define IDC_BUTTON_NEXTDC               1127
+#define IDC_BUTTON_FORMER               1128
+#define IDC_BUTTON_HARDBTNALL           1129
+#define IDC_BUTTON_CALL                 1130
 
 // Next default values for new objects
 // 
@@ -107,7 +111,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1127
+#define _APS_NEXT_CONTROL_VALUE         1131
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

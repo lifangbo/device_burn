@@ -23,6 +23,11 @@
 
 #include "BD_Item.h"
 
+
+#include "ADO\Connection.h"
+#include "ADO\Command.h"
+#include "ADO\Recordset.h"
+
 using namespace std;
 
 #define MAX_TIMEOUT 5000
@@ -46,8 +51,10 @@ using namespace std;
 
 #define STATIC_FIRMFILE "\\xpv"
 
-
-
+#define BTN_CALL		11
+#define BTN_VOICEDOWN	12
+#define BTN_VOICEUP		13 
+#define BTN_MSG			14
 /////////////////////////////////////////////////////////////////////////////
 // CBlueToolTestforJoyDlg dialog
 
@@ -153,6 +160,14 @@ protected:
 	afx_msg LRESULT ui_callback(WPARAM,LPARAM);
 	afx_msg void OnButtonDetectdevice();
 	afx_msg void OnButtonWritecheck();
+	afx_msg void OnButtonNextdc();
+	afx_msg void OnButtonFormer();
+	afx_msg void OnButtonHardbtnall();
+	afx_msg void OnButtonHardbtn1();
+	afx_msg void OnButtonHardbtn2();
+	afx_msg void OnButtonHardbtn3();
+	afx_msg void OnButtonCall();
+	afx_msg void OnButtonHardbtnbegin();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -165,10 +180,17 @@ private:
 	vector<std::string> m_cvc;	//cvc lists.
 	std::vector<std::string> m_mac;
 
-
+	
+	
 	vector<BD_Item> m_itemlists;
+	std::vector<BD_Item>::size_type m_hardcheckindex  ;
+
+	CConnection m_Conn;
+	CRecordset  m_Rst;
+	CCommand    m_Cmd;
 
 public:
+
 	void AppendTestInfo(CString strInfo,BOOL b_color=FALSE);
 	
 	static std::vector<std::string> split(std::string str,std::string pattern);
@@ -176,20 +198,27 @@ public:
 	static void parseBrackets(std::vector<std::string> &vt);
 	
 	
-	 void getHandle(CString &outInfo);
+	void getHandle(CString &outInfo);
 	
+	static UINT thread_HardwareCheck(LPVOID lpParam);
 	
 	static UINT  thread_ProcessBurnFirm(LPVOID lpParam);
+	
 	static UINT  thread_WriteCheckFreq(LPVOID lpParam);
-
-
+	
 	void readCVC(std::vector<std::string> &lst,int count);
-
+	
 	void readMAC(std::vector<std::string> &lst,int count);
-
+	
 	void clearStatus();
-
+	
 	void InitCtrl();
+	
+	void CheckFreq();
+	
+	static UINT GiveHint(LPVOID lpParam);
+
+
 
 };
 

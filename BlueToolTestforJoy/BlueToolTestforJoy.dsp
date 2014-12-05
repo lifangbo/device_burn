@@ -147,6 +147,38 @@ SOURCE=.\res\BlueToolTestforJoy.ico
 SOURCE=.\res\BlueToolTestforJoy.rc2
 # End Source File
 # End Group
+# Begin Group "ado"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ADO\ADOCONST.H
+# End Source File
+# Begin Source File
+
+SOURCE=.\ADO\Command.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ADO\Command.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ADO\Connection.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ADO\Connection.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ADO\Recordset.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ADO\Recordset.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\ReadMe.txt
