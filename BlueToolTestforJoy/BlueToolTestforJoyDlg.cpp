@@ -266,9 +266,11 @@ HCURSOR CBlueToolTestforJoyDlg::OnQueryDragIcon()
 void CBlueToolTestforJoyDlg::OnTestDo() 
 {
 	// TODO: Add your control notification handler code here
+//	SingleBurn(0);
 #ifdef DEBUG
+
 	CString strinfo;
-	getHandle(strinfo); 
+//	getHandle(strinfo); 
 	if (m_lines++%2)
 	{
 		CHARFORMAT cf;
@@ -555,6 +557,7 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	
 	clearStatus();
 
+
 	CString strfile,strname;
 
 	m_edit_global_burnfile.GetWindowText(strfile);
@@ -618,6 +621,8 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	//读取蓝牙设备的Mac地址到list
 	readMAC(m_mac,m_ports.size());
 	
+
+	CheckConnection();
 	
 	//初始化m_lists 
 	std::vector<std::string>::iterator macitr=m_mac.begin();
@@ -970,7 +975,11 @@ void CBlueToolTestforJoyDlg::CheckFreq()
 void CBlueToolTestforJoyDlg::OnButtonNextdc() 
 {
 	// TODO: Add your control notification handler code here
-	m_hardcheckindex++;
+	if (m_hardcheckindex < m_itemlists.size()-1 )
+	{
+		m_hardcheckindex++;
+	}
+	
 }
 
 void CBlueToolTestforJoyDlg::OnButtonFormer() 
@@ -994,7 +1003,7 @@ void CBlueToolTestforJoyDlg::OnButtonHardbtnall()
 	// TODO: Add your control notification handler code here
 	//测试电压等参数。
 	//GiveHint(0);
-	AfxBeginThread( GiveHint , this );
+	AfxBeginThread( TurnLightOn , this );
 
 	AfxBeginThread(thread_HardwareCheck , this );
 
@@ -1238,7 +1247,7 @@ UINT CBlueToolTestforJoyDlg::thread_HardwareCheck(LPVOID lpParam)
 
 
 
-UINT  CBlueToolTestforJoyDlg::GiveHint(LPVOID lpParam)
+UINT  CBlueToolTestforJoyDlg::TurnLightOn(LPVOID lpParam)
 {
 	
 	CBlueToolTestforJoyDlg *p_dlg = (CBlueToolTestforJoyDlg *)lpParam;  
@@ -1281,6 +1290,60 @@ UINT  CBlueToolTestforJoyDlg::GiveHint(LPVOID lpParam)
 	
 	return 0;
 }
+
+
+
+
+
+UINT  CBlueToolTestforJoyDlg::TurnIndexedLightOn(LPVOID lpParam)
+{
+	int port = (int) lpParam ;
+
+	uint32 direction=0xFFFF ,fdirection=0 ;
+	uint32 cvalue=0,fvalue=0;
+	uint32 iHandle=0;
+	uint32 pioMask  ;
+	uint32 errLines;
+	int32 success=0;
+	std::bitset<32> bits(1); 
+	bits.set(0);
+	bits.set(1);
+	
+	pioMask  = bits.to_ulong();
+	cvalue = bits.to_ulong();
+	iHandle = openTestEngineSpi( port  , 0 , SPI_USB ); 
+	
+	if(iHandle)
+	{
+		
+		//备份当前PIO的数值
+		success = bccmdGetPio32(iHandle, &fdirection, &fvalue);
+		
+		success = bccmdSetPio32(iHandle, pioMask, direction, cvalue, &errLines);
+		// Checks if any lines could not be mapped as PIOs
+		if(success != TE_OK)
+		{
+			// Checks which PIO lines could not be set as input or output
+			
+		}
+		else
+		{
+			Sleep(3000);
+			success = bccmdSetPio32(iHandle, pioMask, fdirection, fvalue, &errLines);
+		}
+	}
+	
+	closeTestEngine(iHandle);
+	
+	return 0;
+}
+
+
+
+
+
+
+
 
 void CBlueToolTestforJoyDlg::OnButtonCall() 
 {
@@ -1332,5 +1395,155 @@ void CBlueToolTestforJoyDlg::OnButtonCall()
 void CBlueToolTestforJoyDlg::OnButtonHardbtnbegin() 
 {
 	// TODO: Add your control notification handler code here
-	AfxBeginThread( GiveHint , this );
+
+	m_hardcheckindex = 0;
+	AfxBeginThread( TurnLightOn , this );
+}
+
+
+
+// 
+// int devMask=bitvec.to_ulong();
+// if(flmOpen(devMask, 26, TFL_SPI_USB) != TFL_OK)
+//     {
+
+int CBlueToolTestforJoyDlg::SingleBurn(int index , void * phandle)
+{
+	//单路烧录文件。
+	CBlueToolTestforJoyDlg * pdlg = (CBlueToolTestforJoyDlg *)phandle;
+	CString tempinfo ;
+	bitset<16> bitvec;  //32 bits,all zero
+
+	bitvec.set(index);
+	
+	int devMask=bitvec.to_ulong();
+	if(flmOpen(devMask, 26, TFL_SPI_USB) != TFL_OK)
+    { 
+		return 1 ;
+    }
+	
+    if(flmReadProgramFiles("xpv\\merge.xpv") != TFL_OK)
+    {
+        //std::cout << "Failed to read flash program files" << std::endl; 
+        flmClose(devMask);
+		return 2 ;
+    }
+	
+    if(flmProgramSpawn(devMask, 0, 0, 0) != TFL_OK)
+    { 
+        flmClose(devMask);
+		return 3;
+    } 
+ 
+	
+    uint16 devicesRunning;
+    int32 progress;
+    do
+    {
+        devicesRunning = 0;
+        for(uint32 devIndex = 0; devIndex < 1 ; ++devIndex)
+        {
+            //Only check the progress if the device is in the mask
+            if((devMask >> devIndex) & 1)
+            {
+                progress = flmGetDeviceProgress(devIndex);
+                if(progress < 100)
+                {
+                    ++devicesRunning;
+                }
+				
+				//更新ui
+				tempinfo.Format("设备编号 = %d 进度 = %d\r\n" , devIndex , progress );
+				pdlg->AppendTestInfo(tempinfo); 
+				
+            }
+        }
+        Sleep(1000);
+    }
+    while(devicesRunning > 0);
+	
+    int32 error = flmGetLastError();
+    if(error != TFL_OK)
+    {
+		flmClose(devMask);
+		return 4;        
+    } 
+	
+
+	
+    flmClose(devMask);
+	return 0;	
+
+}
+
+
+
+
+
+
+//准备就绪的时候检查设备是否可读。
+int CBlueToolTestforJoyDlg::CheckConnection()
+{
+	int rVal=0;
+	bitset<16> bitvec;  //32 bits,all zero
+	for(int loop_bs=0 ; loop_bs<m_ports.size() ; loop_bs++ )
+	{
+		bitvec.set(loop_bs);
+	}
+	
+	int devMask=bitvec.to_ulong();
+	if(flmOpen(devMask, 26, TFL_SPI_USB) != TFL_OK)
+    {  
+		rVal=1;
+    }
+	
+    if(flmReadProgramFiles("xpv\\merge.xpv") != TFL_OK)
+    { 
+        flmClose(devMask);
+		rVal=2;
+    }
+
+	flmClose(devMask);
+
+	if (rVal)//有设备连接异常，检查是哪个设备异常。
+	{
+		for (int i=0; i< m_ports.size() ; i++)
+		{
+			if (!isDeviceConnectable(i) )	//设备不可连接。提示异常设备。
+			{
+			
+				CString strInfo ;
+				strInfo.Format("亮红灯设备%s连接异常，请先行处理",m_ports.at(i).c_str());
+				AppendTestInfo( strInfo , TRUE) ;
+				AfxBeginThread( TurnIndexedLightOn , (LPVOID) atoi( m_ports.at(i).c_str() ) ) ;
+				//UINT  CBlueToolTestforJoyDlg::TurnIndexedLightOn(LPVOID lpParam)
+				break;
+			}
+		}
+	}
+	else	//全部测试通过。
+	{
+		AppendTestInfo( "全部测试通过" ) ;
+		return rVal ;
+	}
+	
+}
+
+
+//如果准备就绪的时候检查多个设备不可读，则检测具体哪个设备不可读。
+bool CBlueToolTestforJoyDlg::isDeviceConnectable(int index)
+{
+	bitset<16> bitvec;  //32 bits,all zero
+	bitvec.set(index/*+1*/); 
+	int devMask=bitvec.to_ulong();
+	if(flmOpen(devMask, 26, TFL_SPI_USB) != TFL_OK)
+    {  
+		return false ;
+    }
+	else{
+		//AppendTestInfo("..33333....");
+		flmClose(devMask);
+		return true ;
+	}
+	 
 }

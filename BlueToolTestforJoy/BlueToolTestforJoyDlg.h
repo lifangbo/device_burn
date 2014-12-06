@@ -192,7 +192,7 @@ public:
 	static void parseBrackets(std::vector<std::string> &vt);
 	
 	
-	void getHandle(CString &outInfo);
+//	void getHandle(CString &outInfo);
 	
 	static UINT thread_HardwareCheck(LPVOID lpParam);
 	
@@ -210,9 +210,13 @@ public:
 	
 	void CheckFreq();
 	
-	static UINT GiveHint(LPVOID lpParam);
+	static UINT TurnLightOn(LPVOID lpParam);
+	static UINT TurnIndexedLightOn(LPVOID lpParam);
 
+	static int SingleBurn(int index , void * phandle);
 
+	int CheckConnection();
+	bool isDeviceConnectable(int index);
 
 };
 
