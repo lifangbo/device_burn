@@ -107,6 +107,10 @@ SOURCE=.\BlueToolTestforJoyDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\DBManager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -125,6 +129,10 @@ SOURCE=.\BlueToolTestforJoy.h
 # Begin Source File
 
 SOURCE=.\BlueToolTestforJoyDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DBManager.h
 # End Source File
 # Begin Source File
 

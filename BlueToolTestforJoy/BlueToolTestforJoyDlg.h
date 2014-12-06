@@ -24,9 +24,6 @@
 #include "BD_Item.h"
 
 
-#include "ADO\Connection.h"
-#include "ADO\Command.h"
-#include "ADO\Recordset.h"
 
 using namespace std;
 
@@ -185,9 +182,6 @@ private:
 	vector<BD_Item> m_itemlists;
 	std::vector<BD_Item>::size_type m_hardcheckindex  ;
 
-	CConnection m_Conn;
-	CRecordset  m_Rst;
-	CCommand    m_Cmd;
 
 public:
 
