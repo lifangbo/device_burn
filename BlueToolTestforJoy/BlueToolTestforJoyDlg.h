@@ -23,7 +23,7 @@
 
 #include "BD_Item.h"
 
-
+#include "DBManager.h"
 
 using namespace std;
 
@@ -43,6 +43,10 @@ using namespace std;
 #define DEFAULT_BD_PWD		"koovox"
 
 #define INFOFORMATE	"烧录程序%s;蓝牙名称%s;蓝牙地址%s;CVC码%s;\r\n"
+
+#define ALL_PASSED "合格"
+
+#define ALL_FAILED "不合格"
 
 #define WM_UPDATEINFO WM_USER+8
 
@@ -64,6 +68,22 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CBlueToolTestforJoyDlg)
 	enum { IDD = IDD_BLUETOOLTESTFORJOY_DIALOG };
+	CStatic	m_label_result9;
+	CStatic	m_label_result8;
+	CStatic	m_label_result7;
+	CStatic	m_label_result6;
+	CStatic	m_label_result5;
+	CStatic	m_label_result4;
+	CStatic	m_label_result3;
+	CStatic	m_label_result2;
+	CStatic	m_label_result16;
+	CStatic	m_label_result15;
+	CStatic	m_label_result14;
+	CStatic	m_label_result13;
+	CStatic	m_label_result12;
+	CStatic	m_label_result11;
+	CStatic	m_label_result10;
+	CStatic	m_label_result1;
 	CEdit	m_edit_cvc14;
 	CEdit	m_edit_cvc9;
 	CEdit	m_edit_cvc8;
@@ -182,6 +202,8 @@ private:
 	vector<BD_Item> m_itemlists;
 	std::vector<BD_Item>::size_type m_hardcheckindex  ;
 
+
+	DBManager m_manager ;
 
 public:
 

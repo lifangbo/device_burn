@@ -75,9 +75,9 @@ bool CCommand::ExecuteUpdate(long &AffectedRows,CommandTypeEnum CommandType,CRec
 	try
 	{
 		VARIANT rows; 
-    rows.vt = VT_I4; 
-    Rst.m_pRst=m_pCmd->Execute(&rows,NULL,CommandType);
-	AffectedRows=rows.lVal ;
+		rows.vt = VT_I4; 
+		Rst.m_pRst=m_pCmd->Execute(&rows,NULL,CommandType);
+		AffectedRows=rows.lVal ;
 
 	}
 	catch (CMemoryException* e)

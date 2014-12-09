@@ -23,12 +23,20 @@ public:
 	virtual ~DBManager();
 
 
-	int InitConnection();
+	bool InitConnection();
 
 
-	int Update_TMac(CString usd_time , CString usd_mac);
+	int Update_KeyCvc(  CString usd_time , CString usd_mac);
  
+	int Update_KeyMac( CString usd_time , CString usd_mac);
+
+
 	int Read_Key(CString dbtable , CString key, const int rcount ,  std::vector<std::string> & vtor);
+
+
+
+	int InsertDevice(BD_Item &item);
+
 
 private:
 	CConnection m_Conn;

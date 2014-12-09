@@ -36,10 +36,38 @@ public:
 		return _bd_cvc;
 	}
 
+	bool isAllPass();			//所有测试事项是否通过。
+
+
+	bool isSpawnFileSucced ;	//烧录文件是否成功
+
+	bool isMergeConfigFileSucced ;	//合并配置文件是否成功
+
+	bool isMergeSystemFileSucced ;	//合并系统文件是否成功
+
+	bool isMacWriteSucced ;			//写入mac是否成功
+
+	bool isCvcWriteSucced ;			//cvc码是否写入成功
+
+	bool isDeviceNameWrite ;		//设备名是否写入成功
+
+	bool isFreqCheckSucced ;		//频率检查是否成功
+
+
+	bool isVoiceDownSucced ;		//音量-
+
+	bool isVoiceUpSucced ;			//音量+
+
+	bool isMsgSucced ;				//消息键是否测试通过
+
+	bool isCallSucced ;				//呼叫键是否测试通过
+
 private:
-	std::string _bd_port;
-	std::string _bd_mac;
-	std::string _bd_cvc;
+
+
+	std::string _bd_port;		//设备的spi端口号。
+	std::string _bd_mac;		//分配给此设备的mac地址。
+	std::string _bd_cvc;		//分配给此设备的cvc码
 
 
 

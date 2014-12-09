@@ -60,7 +60,7 @@ END_MESSAGE_MAP()
 // CBlueToolTestforJoyDlg dialog
 
 CBlueToolTestforJoyDlg::CBlueToolTestforJoyDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CBlueToolTestforJoyDlg::IDD, pParent)
+: CDialog(CBlueToolTestforJoyDlg::IDD, pParent)
 {
 
 	
@@ -68,7 +68,11 @@ CBlueToolTestforJoyDlg::CBlueToolTestforJoyDlg(CWnd* pParent /*=NULL*/)
 	
 
 
-
+	m_manager = DBManager();
+// 	if (m_manager.InitConnection())
+// 	{
+// 		
+// 	}
 	m_lines=0;
 	m_hardcheckindex=0;
 	//{{AFX_DATA_INIT(CBlueToolTestforJoyDlg)
@@ -81,6 +85,22 @@ void CBlueToolTestforJoyDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CBlueToolTestforJoyDlg)
+	DDX_Control(pDX, IDC_STATIC_RESULT9, m_label_result9);
+	DDX_Control(pDX, IDC_STATIC_RESULT8, m_label_result8);
+	DDX_Control(pDX, IDC_STATIC_RESULT7, m_label_result7);
+	DDX_Control(pDX, IDC_STATIC_RESULT6, m_label_result6);
+	DDX_Control(pDX, IDC_STATIC_RESULT5, m_label_result5);
+	DDX_Control(pDX, IDC_STATIC_RESULT4, m_label_result4);
+	DDX_Control(pDX, IDC_STATIC_RESULT3, m_label_result3);
+	DDX_Control(pDX, IDC_STATIC_RESULT2, m_label_result2);
+	DDX_Control(pDX, IDC_STATIC_RESULT16, m_label_result16);
+	DDX_Control(pDX, IDC_STATIC_RESULT15, m_label_result15);
+	DDX_Control(pDX, IDC_STATIC_RESULT14, m_label_result14);
+	DDX_Control(pDX, IDC_STATIC_RESULT13, m_label_result13);
+	DDX_Control(pDX, IDC_STATIC_RESULT12, m_label_result12);
+	DDX_Control(pDX, IDC_STATIC_RESULT11, m_label_result11);
+	DDX_Control(pDX, IDC_STATIC_RESULT10, m_label_result10);
+	DDX_Control(pDX, IDC_STATIC_RESULT1, m_label_result1);
 	DDX_Control(pDX, IDC_EDIT_CVC14, m_edit_cvc14);
 	DDX_Control(pDX, IDC_EDIT_CVC9, m_edit_cvc9);
 	DDX_Control(pDX, IDC_EDIT_CVC8, m_edit_cvc8);
@@ -210,6 +230,16 @@ BOOL CBlueToolTestforJoyDlg::OnInitDialog()
 
 	InitCtrl();
 
+
+	if (m_manager.InitConnection())
+	{
+		
+	}
+	else
+	{
+		AppendTestInfo("数据库异常");
+	}
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -267,6 +297,178 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 {
 	// TODO: Add your control notification handler code here
 //	SingleBurn(0);
+	
+	for (std::vector<BD_Item>::iterator itr= m_itemlists.begin(); itr!=m_itemlists.end(); itr++)
+	{ 
+		switch(itr - m_itemlists.begin())
+		{
+			case 0:
+				if (itr->isAllPass())
+				{
+					m_label_result1.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result1.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 1:
+				if (itr->isAllPass())
+				{
+					m_label_result2.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result2.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 2:
+				if (itr->isAllPass())
+				{
+					m_label_result3.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result3.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 3:
+				if (itr->isAllPass())
+				{
+					m_label_result4.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result4.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 4:
+				if (itr->isAllPass())
+				{
+					m_label_result5.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result5.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 5:
+				if (itr->isAllPass())
+				{
+					m_label_result6.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result6.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 6:
+				if (itr->isAllPass())
+				{
+					m_label_result7.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result7.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 7:
+				if (itr->isAllPass())
+				{
+					m_label_result8.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result8.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 8:
+				if (itr->isAllPass())
+				{
+					m_label_result9.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result9.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 9:
+				if (itr->isAllPass())
+				{
+					m_label_result10.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result10.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 10:
+				if (itr->isAllPass())
+				{
+					m_label_result11.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result11.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 11:
+				if (itr->isAllPass())
+				{
+					m_label_result12.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result12.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 12:
+				if (itr->isAllPass())
+				{
+					m_label_result13.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result13.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 13:
+				if (itr->isAllPass())
+				{
+					m_label_result14.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result14.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 14:
+				if (itr->isAllPass())
+				{
+					m_label_result15.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result15.SetWindowText(ALL_FAILED);
+				}	
+				break;
+			case 15:
+				if (itr->isAllPass())
+				{
+					m_label_result16.SetWindowText(ALL_PASSED);
+				}
+				else
+				{
+					m_label_result16.SetWindowText(ALL_FAILED);
+				}	
+				break;
+
+			default:
+				break;
+		} 
+	}
+
+
 #ifdef DEBUG
 
 	CString strinfo;
@@ -314,8 +516,8 @@ void CBlueToolTestforJoyDlg::AppendTestInfo(CString strInfo,BOOL b_color)
 			CFM_ITALIC | CFM_SIZE | CFM_UNDERLINE;
 		cf.dwEffects = 0;
 		cf.yHeight = 14*14;//文字高度
-		cf.crTextColor = RGB(200, 100, 255); //文字颜色
-		strcpy(cf.szFaceName ,_T("隶书"));//设置字体
+		cf.crTextColor = RGB(255, 50, 20); //文字颜色
+		//strcpy(cf.szFaceName ,_T("隶书"));//设置字体
 		m_redit_outinfo.SetSel(-1, -1); 
 		//	m_redit_outinfo.SetSel(1, 5); //设置处理区域
 		m_redit_outinfo.SetSelectionCharFormat(cf);
@@ -466,35 +668,38 @@ UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
     flmClose(devMask);
 	
 	//合并文件。
-	for(vector<std::string>::iterator itr1=p_dlg->m_ports.begin();itr1!=p_dlg->m_ports.end();itr1++)
+//	for(std::vector<std::string>::iterator itr1=p_dlg->m_ports.begin();itr1!=p_dlg->m_ports.end();itr1++)
+	for(std::vector<BD_Item>::iterator itr1=p_dlg->m_itemlists.begin();itr1!=p_dlg->m_itemlists.end();itr1++)
 	{
 		int ret=0;
-		iHandle = openTestEngineSpi(atoi((*itr1).c_str()), 0, SPI_USB );
+		iHandle = openTestEngineSpi(atoi((*itr1).getPort().c_str()), 0, SPI_USB );
 	
 		if (iHandle)
 		{
 			if(	psMergeFromFile( iHandle , "xpv\\sink_config_10001v4_stereo.psr" ) ==1)
 			{
-				//std::cout<<"ps merge sink_config_10001v4_stereo.psr all right "<<std::endl;
-				tempinfo.Format("%s设备成功合并sink_config_10001v4_stereo.psr\r\n" , (*itr1).c_str() );
+				itr1->isMergeConfigFileSucced = true ; 
+				tempinfo.Format("%s设备成功合并配置文件\r\n" , (*itr1).getPort().c_str() ); 
 				p_dlg->AppendTestInfo(tempinfo);
 			}
 			else
 			{
 				//std::cout<<"ps merge sink_config_10001v4_stereo.psr failed "<<std::endl;
-				tempinfo.Format("%s设备合并失败sink_config_10001v4_stereo.psr\r\n", (*itr1).c_str());
+				//itr1->isMergeConfigFileSucced = false ;
+				tempinfo.Format("%s设备合并失败配置文件\r\n", (*itr1).getPort().c_str());
 				p_dlg->AppendTestInfo(tempinfo, TRUE);
 			}
 			
 			if(	psMergeFromFile( iHandle , "xpv\\sink_system_csr8670.psr" ) ==1)
 			{
 				//std::cout<<"ps merge sink_system_csr8670.psr all right "<<std::endl;
-				tempinfo.Format("%s设备成功合并sink_system_csr8670.psr\r\n" , (*itr1).c_str() );
+				itr1->isMergeSystemFileSucced = true ;
+				tempinfo.Format("%s设备成功合并系统文件\r\n" , (*itr1).getPort().c_str() );
 				p_dlg->AppendTestInfo(tempinfo);
 			}
 			else
 			{ 
-				tempinfo.Format("%s设备合并失败sink_system_csr8670.psr\r\n" , (*itr1).c_str());
+				tempinfo.Format("%s设备合并系统文件失败\r\n" , (*itr1).getPort().c_str());
 				p_dlg->AppendTestInfo( tempinfo ,TRUE );
 			}  
 		
@@ -502,7 +707,7 @@ UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
 		}
 		else
 		{
-			tempinfo.Format("%s设备执行合并打开设备失败\r\n" , (*itr1).c_str() );
+			tempinfo.Format("%s设备执行合并打开设备失败\r\n" , (*itr1).getPort().c_str() );
 			p_dlg->AppendTestInfo( tempinfo,true  );
 		}
 		
@@ -622,7 +827,11 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	readMAC(m_mac,m_ports.size());
 	
 
-	CheckConnection();
+	if (CheckConnection())
+	{
+		return ;
+	}
+	
 	
 	//初始化m_lists 
 	std::vector<std::string>::iterator macitr=m_mac.begin();
@@ -883,7 +1092,7 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 	
 	for(std::vector<BD_Item>::iterator itr1=p_dlg->m_itemlists.begin() ; itr1!=p_dlg->m_itemlists.end() ; itr1++)
 	{
-		int ret=0;
+		int retVal=0;
 		iHandle = openTestEngineSpi( atoi( itr1->getPort().c_str() ) , 0 , SPI_USB ); 
 		if (iHandle)
 		{
@@ -895,16 +1104,19 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 			strcpy( (char*)bd_name , str_bdName.GetBuffer(0) );
 			if(psWrite(iHandle, PSKEY_DEVICE_NAME, PS_STORES_I, 20, bd_name) == TE_OK)
 			{
+				itr1->isDeviceNameWrite = true ;
 				tempinfo.Format("%s设备名写入成功\r\n" , itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo(tempinfo);
 			}
 			else
 			{
+				retVal = 1 ;
 				tempinfo.Format("%s写入设备名失败\r\n" , itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo( tempinfo , TRUE );
 			}
 			
 			//设置配对密码
+			/*
 			uint16 bd_pwd[20]={'\0'};
 			strcpy( (char*)bd_pwd , DEFAULT_BD_PWD );
 			if(psWrite( iHandle , PSKEY_FIXED_PIN , PS_STORES_I, 20 , bd_pwd) == TE_OK)
@@ -914,29 +1126,34 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 			}
 			else
 			{ 
+				retVal = 2 ;
 				tempinfo.Format("%s写入配对密码失败\r\n",itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo( tempinfo , TRUE);
 			}
+			*/
 			
 			//cvc码（先做读取操作）
 			uint16 bd_cvc[20]={'\0'};
 			strcpy( (char*)bd_cvc , itr1->getCVC().c_str() );
 			if(psWrite( iHandle , PSKEY_DSP48 , PS_STORES_I, 20 , bd_cvc ) == TE_OK)
 			{ 
+				itr1->isCvcWriteSucced = true ;
 				tempinfo.Format("%s写入CVC码成功\r\n" , itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo( tempinfo );
 			}
 			else
-			{ 
+			{
+				retVal = 3 ;
 				tempinfo.Format("%s写入CVC码失败\r\n" , itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo(tempinfo , TRUE);
 			}
 			
-			//蓝牙地址
+			//MAC蓝牙地址
 			uint16 bd_addr[4]={'\0'};
 			strcpy( (char*)bd_addr , itr1->getMac().c_str() );
 			if(psWrite( iHandle , PSKEY_BDADDR , PS_STORES_I,  4 , bd_addr ) == TE_OK)
 			{ 
+				itr1->isMacWriteSucced = true ;
 				tempinfo.Format("%s写入蓝牙地址%s成功\r\n" , itr1->getPort().c_str() , itr1->getMac().c_str() );
 				p_dlg->AppendTestInfo(tempinfo);
 			}
@@ -945,7 +1162,9 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 				tempinfo.Format("%s写入蓝牙地址失败\r\n" ,itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo(tempinfo , TRUE );
 			}
-
+ 
+			p_dlg->m_manager.InsertDevice(*itr1) ;
+			
 			closeTestEngine(iHandle);
 
 		}
@@ -968,8 +1187,6 @@ void CBlueToolTestforJoyDlg::CheckFreq()
 	then read TXSTART actual freq, value is b
 	then we execute "set Xtal Offset", the actual freq value b.
 	*/
-
-
 }
 
 void CBlueToolTestforJoyDlg::OnButtonNextdc() 
@@ -979,7 +1196,10 @@ void CBlueToolTestforJoyDlg::OnButtonNextdc()
 	{
 		m_hardcheckindex++;
 	}
-	
+	else
+	{
+		AppendTestInfo("已经是最后一个设备\r\n",true);
+	}
 }
 
 void CBlueToolTestforJoyDlg::OnButtonFormer() 
@@ -988,6 +1208,10 @@ void CBlueToolTestforJoyDlg::OnButtonFormer()
 	if (m_hardcheckindex>0)
 	{
 		m_hardcheckindex--;
+	}
+	else
+	{
+		AppendTestInfo("已经是第一个设备\r\n",true);
 	}
 }
 
@@ -1005,7 +1229,7 @@ void CBlueToolTestforJoyDlg::OnButtonHardbtnall()
 	//GiveHint(0);
 	AfxBeginThread( TurnLightOn , this );
 
-	AfxBeginThread(thread_HardwareCheck , this );
+	AfxBeginThread( thread_HardwareCheck , this );
 
 	return;
 
@@ -1042,7 +1266,10 @@ void CBlueToolTestforJoyDlg::OnButtonHardbtn1()
 			if (!bits.test(BTN_VOICEDOWN))
 			{
 				AppendTestInfo("音量-异常\r\n" ,true);
-			}else{
+			}
+			else
+			{
+				m_itemlists.at(m_hardcheckindex).isVoiceDownSucced = true ;
 				AppendTestInfo("音量-正常\r\n");
 			}
 			
@@ -1089,6 +1316,7 @@ void CBlueToolTestforJoyDlg::OnButtonHardbtn2()
 			}
 			else
 			{
+				m_itemlists.at(m_hardcheckindex).isVoiceUpSucced = true ;
 				AppendTestInfo("音量+正常\r\n");
 			}
 			
@@ -1132,7 +1360,10 @@ void CBlueToolTestforJoyDlg::OnButtonHardbtn3()
 			if (!bits.test(BTN_MSG))
 			{
 				AppendTestInfo("消息键异常\r\n" ,true);
-			}else{
+			}
+			else
+			{
+				m_itemlists.at(m_hardcheckindex).isMsgSucced = true ;
 				AppendTestInfo("消息键正常\r\n");
 			}
 			
@@ -1191,6 +1422,7 @@ UINT CBlueToolTestforJoyDlg::thread_HardwareCheck(LPVOID lpParam)
 				{
 					if (!totalbits.test(BTN_CALL))
 					{
+						p_dlg->m_itemlists.at(p_dlg->m_hardcheckindex).isCallSucced = true ;
 						totalbits.set(BTN_CALL);
 						p_dlg->AppendTestInfo("呼叫键按下\r\n");
 					}
@@ -1200,6 +1432,7 @@ UINT CBlueToolTestforJoyDlg::thread_HardwareCheck(LPVOID lpParam)
 				{
 					if (!totalbits.test(BTN_VOICEDOWN))
 					{ 
+						p_dlg->m_itemlists.at(p_dlg->m_hardcheckindex).isVoiceDownSucced = true ;
 						totalbits.set(BTN_VOICEDOWN);
 						p_dlg->AppendTestInfo("音量-键按下\r\n");
 					}
@@ -1208,6 +1441,7 @@ UINT CBlueToolTestforJoyDlg::thread_HardwareCheck(LPVOID lpParam)
 				{
 					if (!totalbits.test(BTN_VOICEUP))
 					{
+						p_dlg->m_itemlists.at(p_dlg->m_hardcheckindex).isVoiceUpSucced = true ;
 						totalbits.set(BTN_VOICEUP);
 						p_dlg->AppendTestInfo("音量+键按下\r\n");
 					}
@@ -1217,6 +1451,7 @@ UINT CBlueToolTestforJoyDlg::thread_HardwareCheck(LPVOID lpParam)
 				{
 					if (!totalbits.test(BTN_MSG))
 					{
+						p_dlg->m_itemlists.at(p_dlg->m_hardcheckindex).isMsgSucced = true ;
 						totalbits.set(BTN_MSG);
 						p_dlg->AppendTestInfo("消息键按下\r\n");
 					}
@@ -1224,7 +1459,8 @@ UINT CBlueToolTestforJoyDlg::thread_HardwareCheck(LPVOID lpParam)
 				}
 				if (totalbits.test(11)&&totalbits.test(12)&&totalbits.test(13)&&totalbits.test(14))
 				{
-					p_dlg->AppendTestInfo("所有按键测试正常\r\n");
+					tempinfo.Format("设备%s所有按键测试正常\r\n" , p_dlg->m_itemlists.at(p_dlg->m_hardcheckindex).getPort().c_str() ) ;
+					p_dlg->AppendTestInfo( tempinfo  );
 					break;
 				}
 				Sleep(50);
@@ -1370,7 +1606,10 @@ void CBlueToolTestforJoyDlg::OnButtonCall()
 			if (!bits.test(BTN_CALL))
 			{
 				AppendTestInfo("呼叫键异常\r\n" ,true);
-			}else{
+			}
+			else
+			{
+				m_itemlists.at(m_hardcheckindex).isCallSucced = true ;
 				AppendTestInfo("呼叫键正常\r\n");
 			}
 			
@@ -1397,7 +1636,7 @@ void CBlueToolTestforJoyDlg::OnButtonHardbtnbegin()
 	// TODO: Add your control notification handler code here
 
 	m_hardcheckindex = 0;
-	AfxBeginThread( TurnLightOn , this );
+//	AfxBeginThread( TurnLightOn , this );
 }
 
 
@@ -1530,6 +1769,7 @@ int CBlueToolTestforJoyDlg::CheckConnection()
 }
 
 
+
 //如果准备就绪的时候检查多个设备不可读，则检测具体哪个设备不可读。
 bool CBlueToolTestforJoyDlg::isDeviceConnectable(int index)
 {
@@ -1547,3 +1787,5 @@ bool CBlueToolTestforJoyDlg::isDeviceConnectable(int index)
 	}
 	 
 }
+
+

@@ -18,7 +18,7 @@ static char THIS_FILE[]=__FILE__;
 
 DBManager::DBManager()
 {
-
+	
 }
 
 DBManager::~DBManager()
@@ -26,27 +26,43 @@ DBManager::~DBManager()
 
 }
 
-int DBManager::InitConnection()
+bool DBManager::InitConnection()
 {
-	int ret=0;
+	bool ret =false;
 	m_Conn.SetConnectionString("Provider=Microsoft.Jet.OLEDB.4.0; Data Source= blueinfo.mdb;Jet OLEDB:DataBase password=;");
-	m_Conn.Open("","","",ConnectOption::adConnectUnspecified); 
+	ret = m_Conn.Open("","","",ConnectOption::adConnectUnspecified); 
     m_Cmd.SetActiveConnection(m_Conn);
-	return ret;
+	return  ret;
 }
 
 
 
-int DBManager::Update_TMac(CString usd_time , CString usd_mac)
+int DBManager::Update_KeyCvc( CString usd_time , CString usd_mac)
 {
 	int ret=0;
 	CString sql;
-	sql.Format("update t_mac set used=1 , used_time='%s' where mac='%s'" , usd_time , usd_mac );
+	sql.Format("update t_cvc set used=1 , used_time='%s' where cvc='%s'"  , usd_time , usd_mac );
 	m_Cmd.SetCommandText(sql);
 	long rows=0;
 	m_Cmd.ExecuteUpdate(rows,CommandType::adCmdText,m_Rst);
 	return ret;
 }
+
+
+
+
+
+int DBManager::Update_KeyMac( CString usd_time , CString usd_mac)
+{
+	int ret=0;
+	CString sql;
+	sql.Format("update t_mac set used=1 , used_time='%s' where mac='%s'"  , usd_time , usd_mac );
+	m_Cmd.SetCommandText(sql);
+	long rows=0;
+	m_Cmd.ExecuteUpdate(rows,CommandType::adCmdText,m_Rst);
+	return ret;
+}
+
 
 
 
@@ -69,4 +85,26 @@ int DBManager::Read_Key(CString dbtable , CString key , const int rcount , std::
 
 	return ret;
 
+}
+
+
+
+int DBManager::InsertDevice(BD_Item &item)
+{
+	
+	item.getMac() ;
+	item.getCVC();
+	int i= (int)item.isSpawnFileSucced ;
+ 
+	CString strTime ;
+	CTime time = CTime::GetCurrentTime();
+	strTime = time.Format("%Y-%m-%d %H:%M:%S");
+
+	int ret=0;
+	CString sql;
+	sql.Format("insert into t_device(mac,cvc,test_time,r_spawnfile,r_merge_system,r_merge_config,r_freqchk,r_writename,r_writeaddr,r_writecvc) values ('%s','%s','%s',%d , %d ,%d , %d , %d , %d , %d)", item.getMac().c_str() ,item.getCVC().c_str() , strTime , (int)item.isSpawnFileSucced , (int)item.isMergeSystemFileSucced , (int)item.isMergeConfigFileSucced , (int)item.isFreqCheckSucced , (int)item.isDeviceNameWrite , (int)item.isMacWriteSucced , (int)item.isCvcWriteSucced );
+	m_Cmd.SetCommandText(sql);
+	long rows=0;
+	m_Cmd.ExecuteUpdate(rows,CommandType::adCmdText,m_Rst);
+	return ret;
 }

@@ -30,7 +30,7 @@ ImplementationFile=BlueToolTestforJoyDlg.cpp
 Filter=D
 BaseClass=CDialog
 VirtualFilter=dWC
-LastObject=IDC_EDIT_GLOBAL_NAME
+LastObject=IDC_STATIC_RESULT1
 
 [CLS:CAboutDlg]
 Type=0
