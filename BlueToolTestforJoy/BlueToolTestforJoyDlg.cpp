@@ -300,6 +300,17 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 	
 	for (std::vector<BD_Item>::iterator itr= m_itemlists.begin(); itr!=m_itemlists.end(); itr++)
 	{ 
+		if (itr->isAllPass())
+		{
+			m_manager.Update_KeyCvc(itr->getCVC().c_str()) ;
+			m_manager.Update_KeyMac(itr->getMac().c_str()) ;
+			m_manager.InsertDevice(*itr) ;
+			AfxBeginThread(TurnIndexedLightOff , (LPVOID) atoi( itr->getPort().c_str() )  );
+		}
+		else
+		{
+			AfxBeginThread( TurnIndexedLightOnForever , (LPVOID) atoi( itr->getPort().c_str() ) ) ; 
+		}
 		switch(itr - m_itemlists.begin())
 		{
 			case 0:
@@ -308,8 +319,8 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 					m_label_result1.SetWindowText(ALL_PASSED);
 				}
 				else
-				{
-					m_label_result1.SetWindowText(ALL_FAILED);
+				{ 
+					m_label_result1.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 1:
@@ -319,7 +330,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result2.SetWindowText(ALL_FAILED);
+					m_label_result2.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 2:
@@ -329,7 +340,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result3.SetWindowText(ALL_FAILED);
+					m_label_result3.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 3:
@@ -339,7 +350,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result4.SetWindowText(ALL_FAILED);
+					m_label_result4.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 4:
@@ -349,7 +360,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result5.SetWindowText(ALL_FAILED);
+					m_label_result5.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 5:
@@ -359,7 +370,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result6.SetWindowText(ALL_FAILED);
+					m_label_result6.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 6:
@@ -369,7 +380,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result7.SetWindowText(ALL_FAILED);
+					m_label_result7.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 7:
@@ -379,7 +390,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result8.SetWindowText(ALL_FAILED);
+					m_label_result8.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 8:
@@ -389,7 +400,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result9.SetWindowText(ALL_FAILED);
+					m_label_result9.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 9:
@@ -399,7 +410,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result10.SetWindowText(ALL_FAILED);
+					m_label_result10.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 10:
@@ -409,7 +420,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result11.SetWindowText(ALL_FAILED);
+					m_label_result11.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 11:
@@ -419,7 +430,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result12.SetWindowText(ALL_FAILED);
+					m_label_result12.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 12:
@@ -429,7 +440,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result13.SetWindowText(ALL_FAILED);
+					m_label_result13.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 13:
@@ -439,7 +450,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result14.SetWindowText(ALL_FAILED);
+					m_label_result14.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 14:
@@ -449,7 +460,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result15.SetWindowText(ALL_FAILED);
+					m_label_result15.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 			case 15:
@@ -459,7 +470,7 @@ void CBlueToolTestforJoyDlg::OnTestDo()
 				}
 				else
 				{
-					m_label_result16.SetWindowText(ALL_FAILED);
+					m_label_result16.SetWindowText(itr->getLastError().c_str());
 				}	
 				break;
 
@@ -742,31 +753,71 @@ LRESULT CBlueToolTestforJoyDlg::ui_callback(WPARAM,LPARAM)
 
 void CBlueToolTestforJoyDlg::readCVC(std::vector<std::string> &lst,int count)
 {
-	while(count--){
-		lst.push_back("111111");//push_back("3465 A979 BC24 C86D 01FF");
+	int retVal = 0; 
+	retVal = m_manager.Read_CVC( count , lst ) ;
+	if (!retVal)
+	{
+		AppendTestInfo("cvc耗尽" , true );
 	}
+	else if( retVal !=count )
+	{
+		AppendTestInfo("cvc编号不足" , true );
+	}
+
+// 	while(count--){ 
+// 		lst.push_back("111111");//push_back("3465 A979 BC24 C86D 01FF");
+// 	}
 }
 
 
 void CBlueToolTestforJoyDlg::readMAC(std::vector<std::string> &lst,int count)
 {
-	while(count--){
-		lst.push_back("123456789");//push_back("00025b00ff01");
+	int retVal = 0 ;
+	retVal = m_manager.Read_MAC( count , lst ) ;
+	if (!retVal)
+	{
+		AppendTestInfo("mac耗尽",true ) ;
 	}
+	else if (retVal != count)
+	{
+		AppendTestInfo("mac地址不足", true );
+	}
+// 	while(count--){
+// 		lst.push_back("123456789"); 
+// 	}
 }
 
+
+
+
+/*
+准备阶段，需要读取mac和cvc字段。如果其中有内容，则有两种可能：
+其一，烧录了mac和cvc，但是按键测试和其他测试没有通过。
+	此时对应某测试电脑的本地数据库肯定是没有这个mac和cvc匹配的记录。
+	此时可以烧录
+其二，已经烧录过，且其他测试均通过。已经将烧录设备的结果写回了数据库。
+	此时不可以再烧录。
+*/
+/*bool CBlueToolTestforJoyDlg::isDeviceBurned()
+{
+	for (std::vector<std::string>::iterator itr = m_ports.begin();
+		itr!=m_ports.end();
+		itr++
+	)
+	{
+		
+	}
+}
+*/
 
 void CBlueToolTestforJoyDlg::OnButtonDetectdevice() 
 {
 	// TODO: Add your control notification handler code here
 	
-	clearStatus();
-
-
-	CString strfile,strname;
-
-	m_edit_global_burnfile.GetWindowText(strfile);
+	clearStatus(); 
 	
+	CString strfile,strname; 
+	m_edit_global_burnfile.GetWindowText(strfile); 
 	m_edit_global_burnname.GetWindowText(strname);
 	
 	if (strfile.IsEmpty()&&strname.IsEmpty())
@@ -774,8 +825,6 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 		MessageBox("请设置烧录文件和设备名称");
 		return;
 	}
-	
- 
 
 	uint32 iHandle(0);
 	uint16 maxLen(256);
@@ -786,6 +835,7 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
  
 	
 	memset(portsStr,0,maxLen);
+
 	int32 status = teGetAvailableSpiPorts(&maxLen, portsStr, transStr, &count);
 	
 	if( status != TE_OK && maxLen != 0 )
@@ -820,11 +870,18 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	parseBrackets(m_ports);
 	
 	
+
+	//检查设备是否有烧录过？如果是，停止分配mac和cvc。
+
+
+
 	//读取蓝牙mac地址。到一个vector，读取一个cvc列表到List
 	readCVC(m_cvc,m_ports.size());
 	
 	//读取蓝牙设备的Mac地址到list
 	readMAC(m_mac,m_ports.size());
+
+	
 	
 
 	if (CheckConnection())
@@ -838,8 +895,8 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	std::vector<std::string>::iterator cvcitr=m_cvc.begin();
 	
 	for( vector<std::string>::iterator portitr=m_ports.begin() ;
-	portitr!=m_ports.end()&&macitr!=m_mac.end()&&cvcitr!=m_cvc.end();
-	portitr++,macitr++,cvcitr++
+			portitr!=m_ports.end()&&macitr!=m_mac.end()&&cvcitr!=m_cvc.end();
+			portitr++,macitr++,cvcitr++
 		)
 	{
 		BD_Item items=BD_Item();
@@ -852,8 +909,8 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 	}
 	int index=0;
 	for (std::vector<BD_Item>::iterator itr=m_itemlists.begin() ;
-	itr!=m_itemlists.end();
-	itr++,index++
+			itr!=m_itemlists.end();
+			itr++,index++
 		)
 	{
 		BD_Item item=*itr;
@@ -969,6 +1026,7 @@ void CBlueToolTestforJoyDlg::OnButtonDetectdevice()
 		transStr=NULL;
 	}
 	AppendTestInfo("准备完成\r\n");
+
 }
 
 
@@ -1111,7 +1169,7 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 			else
 			{
 				retVal = 1 ;
-				tempinfo.Format("%s写入设备名失败\r\n" , itr1->getPort().c_str() );
+				tempinfo.Format("%s设备名写入失败\r\n" , itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo( tempinfo , TRUE );
 			}
 			
@@ -1138,13 +1196,13 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 			if(psWrite( iHandle , PSKEY_DSP48 , PS_STORES_I, 20 , bd_cvc ) == TE_OK)
 			{ 
 				itr1->isCvcWriteSucced = true ;
-				tempinfo.Format("%s写入CVC码成功\r\n" , itr1->getPort().c_str() );
+				tempinfo.Format("%sCVC码写入成功\r\n" , itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo( tempinfo );
 			}
 			else
 			{
 				retVal = 3 ;
-				tempinfo.Format("%s写入CVC码失败\r\n" , itr1->getPort().c_str() );
+				tempinfo.Format("%sCVC码写入失败\r\n" , itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo(tempinfo , TRUE);
 			}
 			
@@ -1154,16 +1212,16 @@ UINT CBlueToolTestforJoyDlg::thread_WriteCheckFreq(LPVOID lpParam)
 			if(psWrite( iHandle , PSKEY_BDADDR , PS_STORES_I,  4 , bd_addr ) == TE_OK)
 			{ 
 				itr1->isMacWriteSucced = true ;
-				tempinfo.Format("%s写入蓝牙地址%s成功\r\n" , itr1->getPort().c_str() , itr1->getMac().c_str() );
+				tempinfo.Format("%sMAC地址写入%s成功\r\n" , itr1->getPort().c_str() , itr1->getMac().c_str() );
 				p_dlg->AppendTestInfo(tempinfo);
 			}
 			else
 			{ 
-				tempinfo.Format("%s写入蓝牙地址失败\r\n" ,itr1->getPort().c_str() );
+				tempinfo.Format("%sMAC地址写入失败\r\n" ,itr1->getPort().c_str() );
 				p_dlg->AppendTestInfo(tempinfo , TRUE );
 			}
  
-			p_dlg->m_manager.InsertDevice(*itr1) ;
+	
 			
 			closeTestEngine(iHandle);
 
@@ -1574,6 +1632,92 @@ UINT  CBlueToolTestforJoyDlg::TurnIndexedLightOn(LPVOID lpParam)
 	return 0;
 }
 
+
+
+UINT  CBlueToolTestforJoyDlg::TurnIndexedLightOnForever(LPVOID lpParam)
+{
+
+	int port = (int) lpParam ; 
+	uint32 direction=0xFFFF ,fdirection=0 ;
+	uint32 cvalue=0,fvalue=0;
+	uint32 iHandle=0;
+	uint32 pioMask  ;
+	uint32 errLines;
+	int32 success=0;
+	std::bitset<32> bits(1); 
+	bits.set(0);
+	bits.set(1);
+	
+	pioMask  = bits.to_ulong();
+	cvalue = bits.to_ulong();
+	iHandle = openTestEngineSpi( port  , 0 , SPI_USB ); 
+	
+	if(iHandle)
+	{
+		
+		//备份当前PIO的数值
+		success = bccmdGetPio32(iHandle, &fdirection, &fvalue);
+		
+		success = bccmdSetPio32(iHandle, pioMask, direction, cvalue, &errLines);
+		// Checks if any lines could not be mapped as PIOs
+		if(success != TE_OK)
+		{
+			// Checks which PIO lines could not be set as input or output
+			
+		}
+		else
+		{
+// 			Sleep(3000);
+// 			success = bccmdSetPio32(iHandle, pioMask, fdirection, fvalue, &errLines);
+		}
+	}
+	
+	closeTestEngine(iHandle);
+	
+	return 0;
+}
+
+
+
+
+UINT  CBlueToolTestforJoyDlg::TurnIndexedLightOff(LPVOID lpParam)
+{
+	
+	int port = (int) lpParam ; 
+	uint32 direction=0xFFFF ,fdirection=0 ;
+	uint32 cvalue=0,fvalue=0;
+	uint32 iHandle=0;
+	uint32 pioMask  ;
+	uint32 errLines;
+	int32 success=0;
+	std::bitset<32> bits(1); 
+	bits.reset(0);
+	bits.reset(1);
+	
+	pioMask  = bits.to_ulong();
+	cvalue = bits.to_ulong();
+	iHandle = openTestEngineSpi( port  , 0 , SPI_USB ); 
+	
+	if(iHandle)
+	{
+		
+		//备份当前PIO的数值
+		success = bccmdGetPio32(iHandle, &fdirection, &fvalue);
+		
+		success = bccmdSetPio32(iHandle, pioMask, direction, cvalue, &errLines);
+		// Checks if any lines could not be mapped as PIOs
+		if(success != TE_OK)
+		{  
+		}
+		else
+		{ 
+		}
+	}
+	
+	closeTestEngine(iHandle);
+	
+	return 0;
+}
 
 
 

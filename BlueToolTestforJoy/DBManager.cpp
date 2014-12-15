@@ -37,11 +37,16 @@ bool DBManager::InitConnection()
 
 
 
-int DBManager::Update_KeyCvc( CString usd_time , CString usd_mac)
+int DBManager::Update_KeyCvc(/* CString usd_time ,*/ CString usd_mac)
 {
 	int ret=0;
+
+	CString strTime ;
+	CTime time = CTime::GetCurrentTime();
+	strTime = time.Format("%Y-%m-%d %H:%M:%S");
+
 	CString sql;
-	sql.Format("update t_cvc set used=1 , used_time='%s' where cvc='%s'"  , usd_time , usd_mac );
+	sql.Format("update t_cvc set used=1 , used_time='%s' where cvc='%s'"  , strTime , usd_mac );
 	m_Cmd.SetCommandText(sql);
 	long rows=0;
 	m_Cmd.ExecuteUpdate(rows,CommandType::adCmdText,m_Rst);
@@ -52,11 +57,16 @@ int DBManager::Update_KeyCvc( CString usd_time , CString usd_mac)
 
 
 
-int DBManager::Update_KeyMac( CString usd_time , CString usd_mac)
+int DBManager::Update_KeyMac(/* CString usd_time ,*/ CString usd_mac)
 {
 	int ret=0;
+
+	CString strTime ;
+	CTime time = CTime::GetCurrentTime();
+	strTime = time.Format("%Y-%m-%d %H:%M:%S");
+
 	CString sql;
-	sql.Format("update t_mac set used=1 , used_time='%s' where mac='%s'"  , usd_time , usd_mac );
+	sql.Format("update t_mac set used=1 , used_time='%s' where mac='%s'"  , strTime , usd_mac );
 	m_Cmd.SetCommandText(sql);
 	long rows=0;
 	m_Cmd.ExecuteUpdate(rows,CommandType::adCmdText,m_Rst);
@@ -66,26 +76,56 @@ int DBManager::Update_KeyMac( CString usd_time , CString usd_mac)
 
 
 
-int DBManager::Read_Key(CString dbtable , CString key , const int rcount , std::vector<std::string> & vtor)
+int DBManager::Read_CVC( const int rcount , std::vector<std::string> & vtor)
 {
 
 	int ret=0;
 	int rows=0;
 	CString strSql;
-	strSql.Format("select top %d %s from %s where used=0" ,rcount ,key , dbtable);
+	strSql.Format("select top %d cvc from t_cvc where used=0" ,rcount );
 	m_Cmd.SetCommandText(strSql);
 	m_Rst.Release();
 	m_Cmd.ExecuteQuery( CommandType::adCmdText , m_Rst);
 	
-	while(m_Rst.GetRecordCount()>0)
+	ret = m_Rst.GetRecordCount();
+
+	int pos = 0; 
+	while((m_Rst.GetRecordCount()>= m_Rst.GetAbsolutePosition() ) && (m_Rst.GetAbsolutePosition()>=1) )
 	{
-		vtor.push_back(m_Rst.GetString(key).GetBuffer(0));
+		vtor.push_back(m_Rst.GetString("cvc").GetBuffer(0));
 		m_Rst.MoveNext();
 	}
 
 	return ret;
 
 }
+
+
+
+
+
+int DBManager::Read_MAC( const int rcount , std::vector<std::string> & vtor)
+{
+	
+	int ret=0;
+	int rows=0;
+	CString strSql;
+	strSql.Format("select top %d mac from t_mac where used=0" ,rcount  );
+	m_Cmd.SetCommandText(strSql);
+	m_Rst.Release();
+	m_Cmd.ExecuteQuery( CommandType::adCmdText , m_Rst);
+	
+	ret = m_Rst.GetRecordCount();
+	
+	while((m_Rst.GetRecordCount()>= m_Rst.GetAbsolutePosition() ) && (m_Rst.GetAbsolutePosition()>=1) )
+	{
+		vtor.push_back(m_Rst.GetString("mac").GetBuffer(0));
+		m_Rst.MoveNext();
+	}
+	return ret;
+	
+}
+
 
 
 

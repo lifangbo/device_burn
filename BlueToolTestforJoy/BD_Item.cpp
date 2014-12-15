@@ -53,3 +53,60 @@ bool BD_Item::isAllPass()
 		return false ;
 	}
 }
+
+
+
+std::string BD_Item::getLastError()
+{
+	std::string msg;
+	if (! isSpawnFileSucced)
+	{
+		msg = "烧录文件未通过";
+		return msg;
+	}
+	else if (!isMergeConfigFileSucced)
+	{
+		msg = "配置文件合并失败";
+		return msg ;
+	}
+	else if (!isMergeSystemFileSucced)
+	{
+		msg = "系统文件合并未通过";
+		return msg ;
+	}
+	else if (!isCvcWriteSucced)
+	{
+		msg = "cvc码写入未通过";
+		return msg ;
+	}
+	else if (!isDeviceNameWrite)
+	{
+		msg = "设备名写入未通过";
+		return msg ;
+	}
+	else if (!isMacWriteSucced)
+	{
+		msg = "mac地址写入未通过";
+		return msg ;
+	} 
+	else if (!isMsgSucced)
+	{
+		msg = "消息按键未通过";
+		return msg ;
+	}
+	else if (!isCallSucced)
+	{
+		msg = "呼叫键测试失败";
+		return msg ;
+	}
+	else if (!isVoiceDownSucced)
+	{
+		msg = "音量减按键未通过";
+		return msg ;
+	}
+	else if (!isVoiceUpSucced)
+	{
+		msg = "音量加按键未通过";
+		return msg ;
+	}
+}

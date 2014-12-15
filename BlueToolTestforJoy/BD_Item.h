@@ -38,6 +38,7 @@ public:
 
 	bool isAllPass();			//所有测试事项是否通过。
 
+	std::string getLastError(); //
 
 	bool isSpawnFileSucced ;	//烧录文件是否成功
 

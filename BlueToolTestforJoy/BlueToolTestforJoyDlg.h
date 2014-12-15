@@ -59,6 +59,32 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 // CBlueToolTestforJoyDlg dialog
 
+
+
+/*
+
+finished list
+---------------------------------------------
+
+2014.12.09
+本地数据读写
+
+2014.12.10
+判断当前设备是否已经有烧录，写入。。。。
+如果已经烧录写入，则不可浪费自己的mac和cvc。
+
+----------------------------------------------
+TODO list
+
+本地数据<----同步---->服务端。
+
+设备频率测试。
+
+操作手册。
+
+*/
+
+
 class CBlueToolTestforJoyDlg : public CDialog
 {
 // Construction
@@ -234,6 +260,10 @@ public:
 	
 	static UINT TurnLightOn(LPVOID lpParam);
 	static UINT TurnIndexedLightOn(LPVOID lpParam);
+	
+	static UINT  TurnIndexedLightOnForever(LPVOID lpParam);
+
+	static UINT  TurnIndexedLightOff(LPVOID lpParam);
 
 	static int SingleBurn(int index , void * phandle);
 

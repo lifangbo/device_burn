@@ -26,14 +26,15 @@ public:
 	bool InitConnection();
 
 
-	int Update_KeyCvc(  CString usd_time , CString usd_mac);
+	int Update_KeyCvc(  /*CString usd_time ,*/ CString usd_mac);
  
-	int Update_KeyMac( CString usd_time , CString usd_mac);
+	int Update_KeyMac( /*CString usd_time , */CString usd_mac);
 
 
-	int Read_Key(CString dbtable , CString key, const int rcount ,  std::vector<std::string> & vtor);
+	//int Read_Key(CString dbtable , CString key, const int rcount ,  std::vector<std::string> & vtor);
+	int Read_CVC( const int rcount , std::vector<std::string> & vtor);
 
-
+	int Read_MAC( const int rcount , std::vector<std::string> & vtor);
 
 	int InsertDevice(BD_Item &item);
 
