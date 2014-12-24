@@ -111,6 +111,10 @@ SOURCE=.\DBManager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\NetConnection.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -133,6 +137,10 @@ SOURCE=.\BlueToolTestforJoyDlg.h
 # Begin Source File
 
 SOURCE=.\DBManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NetConnection.h
 # End Source File
 # Begin Source File
 
