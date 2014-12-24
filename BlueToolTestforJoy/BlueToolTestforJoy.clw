@@ -2,20 +2,22 @@
 
 [General Info]
 Version=1
-LastClass=CBlueToolTestforJoyDlg
+LastClass=CDlgAdmin
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "BlueToolTestforJoy.h"
 
-ClassCount=3
+ClassCount=4
 Class1=CBlueToolTestforJoyApp
 Class2=CBlueToolTestforJoyDlg
 Class3=CAboutDlg
 
-ResourceCount=3
+ResourceCount=4
 Resource1=IDD_ABOUTBOX
 Resource2=IDR_MAINFRAME
 Resource3=IDD_BLUETOOLTESTFORJOY_DIALOG
+Class4=CDlgAdmin
+Resource4=IDD_DIALOG_ADMIN
 
 [CLS:CBlueToolTestforJoyApp]
 Type=0
@@ -30,13 +32,15 @@ ImplementationFile=BlueToolTestforJoyDlg.cpp
 Filter=D
 BaseClass=CDialog
 VirtualFilter=dWC
-LastObject=IDC_STATIC_RESULT1
+LastObject=CBlueToolTestforJoyDlg
 
 [CLS:CAboutDlg]
 Type=0
 HeaderFile=BlueToolTestforJoyDlg.h
 ImplementationFile=BlueToolTestforJoyDlg.cpp
 Filter=D
+BaseClass=CDialog
+VirtualFilter=dWC
 
 [DLG:IDD_ABOUTBOX]
 Type=1
@@ -45,7 +49,7 @@ ControlCount=4
 Control1=IDC_STATIC,static,1342177283
 Control2=IDC_STATIC,static,1342308480
 Control3=IDC_STATIC,static,1342308352
-Control4=IDOK,button,1342373889
+Control4=ID_BTN_GOTOADMIN,button,1342373889
 
 [DLG:IDD_BLUETOOLTESTFORJOY_DIALOG]
 Type=1
@@ -157,4 +161,32 @@ Control103=IDC_BUTTON_HARDBTNALL,button,1342373888
 Control104=IDC_STATIC,button,1342308359
 Control105=IDC_STATIC,button,1342177287
 Control106=IDC_BUTTON_CALL,button,1342242816
+
+[DLG:IDD_DIALOG_ADMIN]
+Type=1
+Class=CDlgAdmin
+ControlCount=14
+Control1=IDC_BUTTON_ADD,button,1342242816
+Control2=IDC_STATIC,static,1342308354
+Control3=IDC_EDIT1,edit,1350631552
+Control4=IDC_STATIC,static,1342308354
+Control5=IDC_EDIT_PWD,edit,1350631584
+Control6=IDC_STATIC,static,1342308352
+Control7=IDC_STATIC,static,1342308352
+Control8=IDC_EDIT3,edit,1350631552
+Control9=IDC_EDIT4,edit,1350631584
+Control10=IDC_BUTTON2,button,1342242816
+Control11=IDC_STATIC,static,1342308354
+Control12=IDC_STATIC,button,1342177287
+Control13=IDC_EDIT_COMFIRMPWD,edit,1350631584
+Control14=IDC_STATIC,button,1342177287
+
+[CLS:CDlgAdmin]
+Type=0
+HeaderFile=DlgAdmin.h
+ImplementationFile=DlgAdmin.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=CDlgAdmin
+VirtualFilter=dWC
 

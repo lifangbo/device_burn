@@ -4,13 +4,13 @@
 #include "stdafx.h"
 #include "BlueToolTestforJoy.h"
 #include "BlueToolTestforJoyDlg.h"
-
+#include "DlgAdmin.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-
+class DlgAdmin;
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
 
@@ -33,6 +33,7 @@ public:
 // Implementation
 protected:
 	//{{AFX_MSG(CAboutDlg)
+	afx_msg void OnBtnGotoadmin();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
@@ -52,7 +53,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
+	ON_BN_CLICKED(ID_BTN_GOTOADMIN, OnBtnGotoadmin)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -1933,3 +1934,11 @@ bool CBlueToolTestforJoyDlg::isDeviceConnectable(int index)
 }
 
 
+
+void CAboutDlg::OnBtnGotoadmin() 
+{
+	// TODO: Add your control notification handler code here
+	CDlgAdmin  pDlg ;//= new CDlgAdmin(this);
+	pDlg.DoModal();
+	OnOK();
+}

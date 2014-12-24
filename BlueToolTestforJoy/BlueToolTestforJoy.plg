@@ -6,70 +6,38 @@
 --------------------Configuration: BlueToolTestforJoy - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating command line "rc.exe /l 0x804 /fo"./temp/Debug/BlueToolTestforJoy.res" /d "_DEBUG" /d "_AFXDLL" "C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BlueToolTestforJoy.rc"" 
-Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSPBBFB.tmp" with contents
+Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSP49B7.tmp" with contents
 [
 /nologo /MDd /W3 /Gm /GX /ZI /Od /I "./blue_dir/include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"./temp/Debug/BlueToolTestforJoy.pch" /Yu"stdafx.h" /Fo"./temp/Debug/" /Fd"./temp/Debug/" /FD /GZ /c 
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BD_Item.cpp"
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BlueToolTestforJoy.cpp"
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BlueToolTestforJoyDlg.cpp"
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\DBManager.cpp"
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\ADO\Command.cpp"
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\ADO\Connection.cpp"
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\ADO\Recordset.cpp"
+"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\NetConnection.cpp"
 ]
-Creating command line "cl.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSPBBFB.tmp" 
-Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSPBBFC.tmp" with contents
-[
-/nologo /MDd /W3 /Gm /GX /ZI /Od /I "./blue_dir/include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"./temp/Debug/BlueToolTestforJoy.pch" /Yc"stdafx.h" /Fo"./temp/Debug/" /Fd"./temp/Debug/" /FD /GZ /c 
-"C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\StdAfx.cpp"
-]
-Creating command line "cl.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSPBBFC.tmp" 
-Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSPBBFD.tmp" with contents
+Creating command line "cl.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSP49B7.tmp" 
+Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSP49B8.tmp" with contents
 [
 TestEngine.lib TestFlash.lib /nologo /subsystem:windows /incremental:yes /pdb:"Debug/BlueToolTestforJoy.pdb" /debug /machine:I386 /out:"Debug/BlueToolTestforJoy.exe" /pdbtype:sept /libpath:".\blue_dir\lib" 
 .\temp\Debug\BD_Item.obj
 .\temp\Debug\BlueToolTestforJoy.obj
 .\temp\Debug\BlueToolTestforJoyDlg.obj
 .\temp\Debug\DBManager.obj
+.\temp\Debug\NetConnection.obj
 .\temp\Debug\StdAfx.obj
 .\temp\Debug\Command.obj
 .\temp\Debug\Connection.obj
 .\temp\Debug\Recordset.obj
 .\temp\Debug\BlueToolTestforJoy.res
+.\temp\Debug\DlgAdmin.obj
 ]
-Creating command line "link.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSPBBFD.tmp"
+Creating command line "link.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSP49B8.tmp"
 <h3>Output Window</h3>
-Compiling resources...
 Compiling...
-StdAfx.cpp
-Compiling...
-BD_Item.cpp
-BlueToolTestforJoy.cpp
-BlueToolTestforJoyDlg.cpp
-DBManager.cpp
-c:\users\administrator\desktop\bd_src\device_burn\bluetooltestforjoy\temp\debug\msado15.tlh(479) : warning C4146: unary minus operator applied to unsigned type, result still unsigned
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\DBManager.cpp(101) : warning C4786: 'std::reverse_iterator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const *,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> > const &,std::basic_string<char,std::char_traits<char>,std::allocator<char> > const *,int>' : identifier was truncated to '255' characters in the debug information
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\DBManager.cpp(101) : warning C4786: 'std::reverse_iterator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > *,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> > &,std::basic_string<char,std::char_traits<char>,std::allocator<char> > *,int>' : identifier was truncated to '255' characters in the debug information
-Command.cpp
-c:\users\administrator\desktop\bd_src\device_burn\bluetooltestforjoy\temp\debug\msado15.tlh(479) : warning C4146: unary minus operator applied to unsigned type, result still unsigned
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\ADO\Command.cpp(83) : warning C4101: 'e' : unreferenced local variable
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\ADO\Command.cpp(87) : warning C4101: 'e' : unreferenced local variable
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\ADO\Command.cpp(90) : warning C4101: 'e' : unreferenced local variable
-Connection.cpp
-c:\users\administrator\desktop\bd_src\device_burn\bluetooltestforjoy\temp\debug\msado15.tlh(479) : warning C4146: unary minus operator applied to unsigned type, result still unsigned
-Recordset.cpp
-c:\users\administrator\desktop\bd_src\device_burn\bluetooltestforjoy\temp\debug\msado15.tlh(479) : warning C4146: unary minus operator applied to unsigned type, result still unsigned
-Generating Code...
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BlueToolTestforJoyDlg.cpp(1538) : warning C4715: 'CBlueToolTestforJoyDlg::thread_HardwareCheck' : not all control paths return a value
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BlueToolTestforJoyDlg.cpp(1913) : warning C4715: 'CBlueToolTestforJoyDlg::CheckConnection' : not all control paths return a value
-C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\BD_Item.cpp(112) : warning C4715: 'BD_Item::getLastError' : not all control paths return a value
+NetConnection.cpp
+C:\Users\Administrator\Desktop\bd_src\device_burn\BlueToolTestforJoy\NetConnection.cpp(88) : warning C4102: 'recive' : unreferenced label
 Linking...
 
 
 
 <h3>Results</h3>
-BlueToolTestforJoy.exe - 0 error(s), 12 warning(s)
+BlueToolTestforJoy.exe - 0 error(s), 1 warning(s)
 </pre>
 </body>
 </html>

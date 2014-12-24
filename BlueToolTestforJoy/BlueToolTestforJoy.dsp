@@ -111,6 +111,10 @@ SOURCE=.\DBManager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\DlgAdmin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\NetConnection.cpp
 # End Source File
 # Begin Source File
@@ -137,6 +141,10 @@ SOURCE=.\BlueToolTestforJoyDlg.h
 # Begin Source File
 
 SOURCE=.\DBManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DlgAdmin.h
 # End Source File
 # Begin Source File
 

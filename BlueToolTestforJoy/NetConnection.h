@@ -8,17 +8,27 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+#include <Winsock2.h>
+
 
 class NetConnection  
 {
-public:
+private:
 	NetConnection();
+	NetConnection(NetConnection const&){};             // copy constructor is private
+	NetConnection& operator=(NetConnection const&){};  // assignment operator is private
+	static NetConnection* m_pInstance;
+
+public:
 	virtual ~NetConnection();
 
+	static NetConnection* Instance();
+
+	SOCKET clientSocket;
 
 
-
-
+	int connect_server();
+	int send_buf(const char * buf,char * receiveBuf,int len);
 
 };
 
