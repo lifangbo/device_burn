@@ -106,13 +106,14 @@
 #define IDC_BUTTON_HARDBTNALL           1129
 #define IDC_BUTTON_CALL                 1130
 #define IDC_BUTTON_ADD                  1131
-#define IDC_EDIT1                       1132
+#define IDC_EDIT_TESTORNAME             1132
 #define IDC_EDIT_PWD                    1133
-#define IDC_EDIT3                       1134
-#define IDC_EDIT4                       1135
+#define IDC_EDIT_ADMINNAME              1134
+#define IDC_EDIT_ADMINPWD               1135
 #define IDC_BUTTON2                     1136
 #define IDC_EDIT_COMFIRMPWD             1137
 #define ID_BTN_GOTOADMIN                1137
+#define IDC_STATIC_ADDRESULT            1138
 
 // Next default values for new objects
 // 
@@ -120,7 +121,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1138
+#define _APS_NEXT_CONTROL_VALUE         1139
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

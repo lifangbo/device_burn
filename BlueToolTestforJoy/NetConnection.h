@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include <Winsock2.h>
-
+#include <string>
 
 class NetConnection  
 {
@@ -28,7 +28,7 @@ public:
 
 
 	int connect_server();
-	int send_buf(const char * buf,char * receiveBuf,int len);
+	int send_buf(const char * buf,std::string &rec_str,int operation);
 
 };
 

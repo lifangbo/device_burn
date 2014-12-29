@@ -52,7 +52,12 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CDlgAdmin)
 	enum { IDD = IDD_DIALOG_ADMIN };
-		// NOTE: the ClassWizard will add data members here
+	CEdit	m_testorname;
+	CEdit	m_pwd;
+	CEdit	m_comfirmpwd;
+	CEdit	m_adminpwd;
+	CEdit	m_adminname;
+	CStatic	m_label_addresult;
 	//}}AFX_DATA
 
 
@@ -73,7 +78,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 
-
+private:
+	static UINT AddTestorAccount(LPVOID lpParam);
 
 
 

@@ -11,6 +11,9 @@
 #include <iostream>
 #pragma  comment(lib,"ws2_32.lib")
 
+#include <string>
+
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -46,14 +49,27 @@ NetConnection* NetConnection::Instance()
 
 int NetConnection::connect_server()
 {
-	int retVal=0;
+	int retVal=0; 
 
-	SOCKET clientSocket=socket(AF_INET,SOCK_STREAM,0);
+	int err;
+    WORD versionRequired;
+	WSADATA wsaData;
+    versionRequired=MAKEWORD(1,1);
+    err=WSAStartup(versionRequired,&wsaData);//协议库的版本信息
+    if (!err)    {
+        printf("客户端嵌套字已经打开!\n");
+    }else{
+        printf("ERROR:客户端的嵌套字打开失败!\n");
+        return 1;//结束
+    }
+	clientSocket=socket(AF_INET,SOCK_STREAM,0);
 	SOCKADDR_IN clientsock_in;
     clientsock_in.sin_addr.S_un.S_addr=inet_addr("192.168.0.113");
     clientsock_in.sin_family=AF_INET;
     clientsock_in.sin_port=htons(8080); 
     retVal = connect(clientSocket,(SOCKADDR*)&clientsock_in,sizeof(SOCKADDR));//开始连接 
+
+ 
 	return retVal;
 }
 
@@ -61,11 +77,11 @@ int NetConnection::connect_server()
 
 //only could send char buf, 
 //if it contains none character, bugs may happen.
-int NetConnection::send_buf(const char * buf,char * receiveBuf,int len)
+int NetConnection::send_buf(const char * buf,std::string &rec_str,int operation)
 {
+
 //	char receiveBuf[10000]={'\0'};
-	int retVal=0;
-//	sprintf(buf, "%s","{\"count\": 16,\"testor\": \"test1\",\"pwd\": \"test1'pwd1\"}"); 
+	int retVal=0; 
 	char package[3072]={'\0'}; 
 	//pack head
 	strcat(package,"1234");
@@ -76,7 +92,7 @@ int NetConnection::send_buf(const char * buf,char * receiveBuf,int len)
 	
 	//pack operation code
 	char operbuf[5]={'\0'};
-	sprintf(operbuf,"%04d",1002);
+	sprintf(operbuf,"%04d",operation);
 	strcat(package,operbuf);
 	//data buf .
 	strcat(package,buf);
@@ -84,18 +100,30 @@ int NetConnection::send_buf(const char * buf,char * receiveBuf,int len)
 	strcat(package,"4321");
 	send(clientSocket, package ,strlen(package)+1,0);
 	int rec_len=0;
-	char temp[1500]={'\0'};
-recive:
-	memset(temp,0,sizeof(temp));
-	rec_len=recv(clientSocket,temp,len,0);
-	if ( (*(temp+rec_len-1-4)=='1')&&
-		( *(temp+rec_len-1-4+1) == '2' )&&
-		( *(temp+rec_len-1-4+2) == '3' )&&
-		( *(temp+rec_len-1-4+3) == '4' )
+	const int len=1500;
+	char rec_temp[len]={'\0'};
+ 
+
+	rec_len=recv(clientSocket,rec_temp,len-1,0);
+
+	rec_str.append(rec_temp);
+
+//	return retVal;
+	while ( !( (*(rec_temp+rec_len-1-4+1)=='4')&&
+		( *(rec_temp+rec_len-1-4+2) == '3' )&&
+		( *(rec_temp+rec_len-1-4+3) == '2' )&&
+		( *(rec_temp+rec_len-1-4+4) == '1' ) )
 	)//finished a package.
 	{
-		
-	}
+ 
+		int l=sizeof(rec_temp);
+
+		memset(rec_temp,0,sizeof(rec_temp));
+		rec_len=recv(clientSocket,rec_temp,len-1,0);
+ 
+		rec_str.append(rec_temp);
+	} 
 
 	return retVal;
+
 }
