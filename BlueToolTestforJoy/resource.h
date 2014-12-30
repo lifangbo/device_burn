@@ -110,7 +110,7 @@
 #define IDC_EDIT_PWD                    1133
 #define IDC_EDIT_ADMINNAME              1134
 #define IDC_EDIT_ADMINPWD               1135
-#define IDC_BUTTON2                     1136
+#define IDC_BUTTON_CHANGPWD             1136
 #define IDC_EDIT_COMFIRMPWD             1137
 #define ID_BTN_GOTOADMIN                1137
 #define IDC_STATIC_ADDRESULT            1138

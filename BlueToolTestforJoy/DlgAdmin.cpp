@@ -77,6 +77,7 @@ void CDlgAdmin::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDlgAdmin, CDialog)
 	//{{AFX_MSG_MAP(CDlgAdmin)
 	ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
+	ON_BN_CLICKED(IDC_BUTTON_CHANGPWD, OnButtonChangpwd)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -130,16 +131,7 @@ UINT CDlgAdmin::AddTestorAccount(LPVOID lpParam)
 //	p_dlg->m_label_addresult = "{\"admin\": \"joysoftadmin\",\"adminpwd\": \"obasang\",\"testor\": \"testor's work id\",\"testorpwd\": \"pwd\"}"
 	std::string reqstr;
 	NetConnection::Instance()->send_buf(sendbuf, reqstr, 1001);
-
- 
-// 	FILE * pf = fopen("E:\\log.txt","a+");
-// 	if (pf)
-// 	{
-// 		fprintf(pf,"%s",strjson.c_str());
-// 		fclose(pf);
-// 	}
-//	strjson="{\"result\": \"0\"}";
-	
+  
 	std::string strjson(reqstr.c_str()+12 , reqstr.size() );
 
 	Json::Reader reader;
@@ -160,11 +152,76 @@ UINT CDlgAdmin::AddTestorAccount(LPVOID lpParam)
 			p_dlg->m_label_addresult.SetWindowText("账号添加失败");
 		}
 		
-	}
-	
-//	cout << value["name"].asString()<<endl;
-//	cout << value["age"].asInt()<<endl;
-//	cout << value["major"].asString()<<endl;
+	} 
 
+	return 0;
+}
+
+void CDlgAdmin::OnButtonChangpwd() 
+{
+	// TODO: Add your control notification handler code here
+	CString stradminname;
+	CString stradminpwd;
+	CString strtestorname;
+	CString strtestorpwd;
+	CString strtestorcomfirmpwd;
+	m_adminname.GetWindowText(stradminname);
+	m_adminpwd.GetWindowText(stradminpwd);
+	m_testorname.GetWindowText(strtestorname);
+	m_comfirmpwd.GetWindowText(strtestorcomfirmpwd);
+	m_pwd.GetWindowText(strtestorpwd);
+	if (stradminname.IsEmpty()||stradminpwd.IsEmpty()||strtestorname.IsEmpty()||strtestorpwd.IsEmpty()||strtestorcomfirmpwd.IsEmpty())
+	{
+		m_label_addresult.SetWindowText("账号或密码不能有空");
+	}else if (strtestorcomfirmpwd.Compare(strtestorpwd))
+	{
+		m_label_addresult.SetWindowText("确认密码不一致");
+	}
+	else
+	{
+		AfxBeginThread( ChangePwd , this );
+	}
+}
+
+
+
+UINT CDlgAdmin::ChangePwd(LPVOID lpParam)
+{
+	CDlgAdmin *p_dlg = (CDlgAdmin *)lpParam;  
+	CString stradminname;
+	CString stradminpwd;
+	CString strtestorname;
+	CString strtestorpwd; 
+	p_dlg->m_adminname.GetWindowText(stradminname);
+	p_dlg->m_adminpwd.GetWindowText(stradminpwd);
+	p_dlg->m_testorname.GetWindowText(strtestorname); 
+	p_dlg->m_pwd.GetWindowText(strtestorpwd);
+	CString sendbuf;
+	sendbuf.Format("{\"admin\": \"%s\",\"adminpwd\": \"%s\",\"testor\": \"%s\",\"testorpwd\": \"pwd\"}", stradminname, stradminpwd, strtestorname, strtestorpwd); 
+	std::string reqstr;
+	NetConnection::Instance()->send_buf(sendbuf, reqstr, 1003);
+	
+	std::string strjson(reqstr.c_str()+12 , reqstr.size() );
+	
+	Json::Reader reader;
+	Json::Value value;
+	bool bRet = reader.parse(strjson, value);
+	if (false == bRet)
+	{
+		//	cerr << endl << "read value error \n";
+		p_dlg->m_label_addresult.SetWindowText( "json formate error");
+		return -1;
+	}else{
+		std::string str =  value["result"].asString();
+		int jsonresult =0;
+		if (jsonresult==0)
+		{
+			p_dlg->m_label_addresult.SetWindowText("密码修改成功");
+		}else{
+			p_dlg->m_label_addresult.SetWindowText("修改密码失败");
+		}
+		
+	} 
+	
 	return 0;
 }

@@ -74,6 +74,7 @@ protected:
 	// Generated message map functions
 	//{{AFX_MSG(CDlgAdmin)
 	afx_msg void OnButtonAdd();
+	afx_msg void OnButtonChangpwd();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -81,7 +82,7 @@ protected:
 private:
 	static UINT AddTestorAccount(LPVOID lpParam);
 
-
+	static UINT ChangePwd(LPVOID lpParam);
 
 };
 //{{AFX_INSERT_LOCATION}}
