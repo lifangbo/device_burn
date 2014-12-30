@@ -18,7 +18,7 @@ private:
 	NetConnection(NetConnection const&){};             // copy constructor is private
 	NetConnection& operator=(NetConnection const&){};  // assignment operator is private
 	static NetConnection* m_pInstance;
-
+	bool isconnected;
 public:
 	virtual ~NetConnection();
 

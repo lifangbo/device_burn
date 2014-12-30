@@ -5,6 +5,8 @@
 #include "BlueToolTestforJoy.h"
 #include "BlueToolTestforJoyDlg.h"
 #include "DlgAdmin.h"
+#include "NetConnection.h"
+#include "./json/json.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -86,6 +88,8 @@ void CBlueToolTestforJoyDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CBlueToolTestforJoyDlg)
+	DDX_Control(pDX, IDC_EDIT_PWD, m_testorpwd);
+	DDX_Control(pDX, IDC_EDIT_TESTORID, m_testorid);
 	DDX_Control(pDX, IDC_STATIC_RESULT9, m_label_result9);
 	DDX_Control(pDX, IDC_STATIC_RESULT8, m_label_result8);
 	DDX_Control(pDX, IDC_STATIC_RESULT7, m_label_result7);
@@ -193,6 +197,7 @@ BEGIN_MESSAGE_MAP(CBlueToolTestforJoyDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_HARDBTN3, OnButtonHardbtn3)
 	ON_BN_CLICKED(IDC_BUTTON_CALL, OnButtonCall)
 	ON_BN_CLICKED(IDC_BUTTON_HARDBTNBEGIN, OnButtonHardbtnbegin)
+	ON_BN_CLICKED(IDC_BUTTON_REQMACCVC, OnButtonReqmaccvc)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -1941,4 +1946,73 @@ void CAboutDlg::OnBtnGotoadmin()
 	CDlgAdmin  pDlg ;//= new CDlgAdmin(this);
 	pDlg.DoModal();
 	OnOK();
+}
+
+void CBlueToolTestforJoyDlg::OnButtonReqmaccvc() 
+{
+	// TODO: Add your control notification handler code here
+	CString strtestorid;
+	CString strtestorpwd; 
+	
+	m_testorid.GetWindowText(strtestorid);
+	m_testorpwd.GetWindowText(strtestorpwd);
+	if (!strtestorid.IsEmpty()&&!strtestorpwd.IsEmpty())
+	{
+		AfxBeginThread( ReqMacCvc , this );
+	}else{
+		AppendTestInfo("员工账号和密码不能为空\n",true);
+	}
+	
+}
+
+
+
+
+
+
+//UINT  CBlueToolTestforJoyDlg::thread_ProcessBurnFirm(LPVOID lpParam)
+UINT CBlueToolTestforJoyDlg::ReqMacCvc(LPVOID lpParam)
+{
+	CBlueToolTestforJoyDlg *p_dlg = (CBlueToolTestforJoyDlg *)lpParam;  
+	CString strtestorid;
+	CString strtestorpwd;
+	int reqnum =48;
+ 
+	p_dlg->m_testorid.GetWindowText(strtestorid);
+	p_dlg->m_testorpwd.GetWindowText(strtestorpwd);
+ 
+	CString sendbuf;
+	sendbuf.Format("{\"count\": %d,\"testor\":\"%s\",\"pwd\":\"%s\"}", reqnum, strtestorid, strtestorpwd);
+	//	p_dlg->m_label_addresult = "{\"admin\": \"joysoftadmin\",\"adminpwd\": \"obasang\",\"testor\": \"testor's work id\",\"testorpwd\": \"pwd\"}"
+	std::string reqstr;
+	NetConnection::Instance()->connect_server();
+	NetConnection::Instance()->send_buf(sendbuf, reqstr, 1002);
+	
+	std::string strjson(reqstr.c_str()+12 , reqstr.size() );
+	
+	Json::Reader reader;
+	Json::Value value;
+	bool bRet = reader.parse(strjson, value);
+	if (false == bRet)
+	{
+		//	cerr << endl << "read value error \n";
+		p_dlg->AppendTestInfo("数据请求失败\n",true);
+		return -1;
+	}else{
+		//std::string str =  value["count"].asString();
+	
+		int jsonresult =0;
+		jsonresult =	atoi(value["count"].asString().c_str()) ;
+		if (0<jsonresult)
+		{
+			p_dlg->AppendTestInfo("数据更新成功\n",true);
+		}
+		else
+		{
+			p_dlg->AppendTestInfo("数据更新失败\n",true);
+		}
+		
+	} 
+	
+	return 0;
 }

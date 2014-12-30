@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CDlgAdmin
+LastClass=CBlueToolTestforJoyDlg
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "BlueToolTestforJoy.h"
@@ -32,7 +32,7 @@ ImplementationFile=BlueToolTestforJoyDlg.cpp
 Filter=D
 BaseClass=CDialog
 VirtualFilter=dWC
-LastObject=CBlueToolTestforJoyDlg
+LastObject=IDC_BUTTON_REQMACCVC
 
 [CLS:CAboutDlg]
 Type=0
@@ -54,7 +54,7 @@ Control4=ID_BTN_GOTOADMIN,button,1342373889
 [DLG:IDD_BLUETOOLTESTFORJOY_DIALOG]
 Type=1
 Class=CBlueToolTestforJoyDlg
-ControlCount=106
+ControlCount=114
 Control1=ID_TEST_DO,button,1342242817
 Control2=ID_CANCEL,button,1342242816
 Control3=IDC_RICHEDIT_OUTINFO,RICHEDIT,1353777284
@@ -161,6 +161,14 @@ Control103=IDC_BUTTON_HARDBTNALL,button,1342373888
 Control104=IDC_STATIC,button,1342308359
 Control105=IDC_STATIC,button,1342177287
 Control106=IDC_BUTTON_CALL,button,1342242816
+Control107=IDC_STATIC,static,1342308352
+Control108=IDC_EDIT_TESTORID,edit,1350631552
+Control109=IDC_STATIC,static,1342308352
+Control110=IDC_EDIT_PWD,edit,1350631584
+Control111=IDC_BUTTON_REQMACCVC,button,1342242816
+Control112=IDC_STATIC,button,1342177287
+Control113=IDC_STATIC,static,1342308352
+Control114=IDC_STATIC_LEFTMACCVC,static,1342308352
 
 [DLG:IDD_DIALOG_ADMIN]
 Type=1

@@ -94,6 +94,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CBlueToolTestforJoyDlg)
 	enum { IDD = IDD_BLUETOOLTESTFORJOY_DIALOG };
+	CEdit	m_testorpwd;
+	CEdit	m_testorid;
 	CStatic	m_label_result9;
 	CStatic	m_label_result8;
 	CStatic	m_label_result7;
@@ -211,6 +213,7 @@ protected:
 	afx_msg void OnButtonHardbtn3();
 	afx_msg void OnButtonCall();
 	afx_msg void OnButtonHardbtnbegin();
+	afx_msg void OnButtonReqmaccvc();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -239,6 +242,7 @@ public:
 	
 	static void parseBrackets(std::vector<std::string> &vt);
 	
+	static UINT ReqMacCvc(LPVOID lpParam);
 	
 //	void getHandle(CString &outInfo);
 	

@@ -29,7 +29,7 @@ NetConnection* NetConnection::m_pInstance = NULL;
 
 NetConnection::NetConnection()
 {
-
+	isconnected = false ;
 }
 
 NetConnection::~NetConnection()
@@ -41,7 +41,10 @@ NetConnection::~NetConnection()
 NetConnection* NetConnection::Instance()
 {
 	if (!m_pInstance)   // Only allow one instance of class to be generated.
+	{
 		m_pInstance = new NetConnection;
+	
+	}
 	
 	return m_pInstance;
 }
@@ -49,6 +52,10 @@ NetConnection* NetConnection::Instance()
 
 int NetConnection::connect_server()
 {
+	if (isconnected)
+	{
+		return -1;
+	}
 	int retVal=0; 
 
 	int err;
@@ -69,7 +76,7 @@ int NetConnection::connect_server()
     clientsock_in.sin_port=htons(8080); 
     retVal = connect(clientSocket,(SOCKADDR*)&clientsock_in,sizeof(SOCKADDR));//开始连接 
 
- 
+	isconnected= true;
 	return retVal;
 }
 
